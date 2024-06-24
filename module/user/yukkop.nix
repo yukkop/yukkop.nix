@@ -3,6 +3,7 @@
 {
   imports = [
     inputs.impermanence.nixosModules.home-manager.impermanence
+    ../program/nixvim.nix
   ];
 
   home.stateVersion = "24.05";
