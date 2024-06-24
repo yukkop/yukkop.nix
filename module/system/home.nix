@@ -7,7 +7,13 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      ./home/hardware-configuration.nix
+
+      inputs.disko.nixosModules.default
+      (import ../../disko.nix { device = "/dev/nvme0n1"; })
+
+      inputs.impermanence.nixosModules.impermanence
+      inputs.home-manager.nixosModules.default
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -82,7 +88,7 @@
   home-manager = {
     extraSpecialArgs = {inherit inputs;};
     users = {
-      "yukkop" = import ../../user/yukkop.nix;
+      "yukkop" = import ../user/yukkop.nix;
 
     };
   };
