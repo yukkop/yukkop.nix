@@ -40,7 +40,7 @@
 
   hardware = {
 
-    graphics.enable = true;
+    opengl.enable = true;
 
     # Most wayland compositors need this
     nvidia.modesetting.enable = true;

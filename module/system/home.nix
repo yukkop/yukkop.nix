@@ -23,7 +23,6 @@ in
 
       #(flakeRoot.nixosModules.program.steam { userName = user; pkgs = pkgs; })
       (flakeRoot.nixosModules.program.qutebrowser { userName = user; pkgs = pkgs; })
-      (flakeRoot.nixosModules.program.qutebrowser { userName = user; pkgs = pkgs; })
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -77,7 +76,6 @@ in
       #{ file = "/var/keys/secret_file"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
     ];
   };
-
 
   ## home managet
   programs.fuse.userAllowOther = true;
@@ -161,6 +159,7 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     tmux
+    blender
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

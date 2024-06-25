@@ -72,7 +72,7 @@
             #  };
 	    #};
 	  };
-	  nil_ls = {
+	  nil-ls = {
 	    enable = true;
 	    extraOptions = {
               formatting = { command = ["nixpkgs-fmt"]; };

@@ -8,18 +8,20 @@
     hyprland.url = "github:hyprwm/Hyprland";
 
     nixvim = {
+      #url = "github:nix-community/nixvim/nixos-24.05";
+      #inputs.nixpkgs.follows = "nixpkgs-24-05";
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     deploy-rs = {
       url = "github:serokell/deploy-rs";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs-24-05";
     };
 
     disko = {
       url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs-24-05";
     };
 
     impermanence = {
@@ -27,8 +29,8 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:nix-community/home-manager/release-24.05";
+      inputs.nixpkgs.follows = "nixpkgs-24-05";
     };
   };
 
@@ -61,24 +63,12 @@
 
       nixosModules = self.lib.readModulesRecursive ./module;
 
-      #nixosConfigurations.home = nixpkgs-unstable.lib.nixosSystem {
-      #  system = "x86_64-linux";
-      #  specialArgs = {inherit inputs;};
-      #  modules = [
-      #    inputs.disko.nixosModules.default
-      #    (import ./disko.nix { device = "/dev/nvme0n1"; })
-
-      #    ./host/home/configuration.nix
-      #          
-      #    inputs.impermanence.nixosModules.impermanence
-      #    inputs.home-manager.nixosModules.default
-      #  ];
-      #};
+      nixpkgs-unstable.config.allowUnfree = true;
 
       nixosConfigurations = let 
         mkNixosConfiguration = self.lib.mkNixosConfiguration ./module;
       in builtins.listToAttrs [
-        (mkNixosConfiguration nixpkgs-unstable "home" {
+        (mkNixosConfiguration nixpkgs-24-05 "home" {
 	  system = "x86_64-linux";
 	  specialArgs = {
             inherit inputs flakeRootPath;
