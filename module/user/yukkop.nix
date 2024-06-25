@@ -17,11 +17,14 @@
   home-manager = {
     users = {
       "yukkop" = {
-        imports = [
+        imports = let 
+          #screenshoter = flakeRoot.nixosModules.program.screenshot.wayland-way;
+	  screenshoter = import ../program/screenshot/wayland-way.nix;
+	in [
           inputs.impermanence.nixosModules.home-manager.impermanence
           (flakeRoot.nixosModules.program.nixvim { homeManager = true; nixvim = inputs.nixvim; })
-          flakeRoot.nixosModules.program.hyprland.home-manager
-          flakeRoot.nixosModules.program.flameshot
+          (flakeRoot.nixosModules.program.hyprland.home-manager { screenshotCommand = ""; })
+	  #screenshoter.module pkgs
         ];
 
         home.stateVersion = "24.05";

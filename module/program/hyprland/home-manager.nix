@@ -1,4 +1,4 @@
-{ ... }: {
+{ screenshotCommand ? null, ... }: {
   /* this module may include in home-manager module */
 
   wayland.windowManager.hyprland = {
@@ -11,7 +11,7 @@
 
       "$mod" = "SUPER";
       "$terminal" = "kitty";
-      "$screenshot" = "flameshot";
+      "$screenshot" = "${screenshotCommand}";
       "$menu" = "rofi -show drun -show-icons";
 
       monitor = ",preferred,auto,auto";

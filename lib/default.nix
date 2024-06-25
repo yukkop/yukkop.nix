@@ -75,24 +75,24 @@
         }
     ) (builtins.readDir path);
 
-readModulesRecursive' = path:
-    with lib;
-    with builtins; let
-      paths = pipe "${path}" [
-        (filesystem.listFilesRecursive)
-        (filter (hasSuffix ".nix"))
-      ];
-      pathToName = flip pipe [
-        (removePrefix "${path}/")
-        (replaceStrings ["/" ".nix"] ["." ""])
-        (removeSuffix ".nix")
-      ];
-      attrList =
-        map (path': {
-          name = pathToName (unsafeDiscardStringContext path');
-          value = import path';
-        })
-        paths;
-    in
-      listToAttrs attrList;
+    readModulesRecursive' = path:
+        with lib;
+        with builtins; let
+          paths = pipe "${path}" [
+            (filesystem.listFilesRecursive)
+            (filter (hasSuffix ".nix"))
+          ];
+          pathToName = flip pipe [
+            (removePrefix "${path}/")
+            (replaceStrings ["/" ".nix"] ["." ""])
+            (removeSuffix ".nix")
+          ];
+          attrList =
+            map (path': {
+              name = pathToName (unsafeDiscardStringContext path');
+              value = import path';
+            })
+            paths;
+        in
+          listToAttrs attrList;
 }
