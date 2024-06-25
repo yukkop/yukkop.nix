@@ -21,6 +21,7 @@
           inputs.impermanence.nixosModules.home-manager.impermanence
           (flakeRoot.nixosModules.program.nixvim { homeManager = true; nixvim = inputs.nixvim; })
           flakeRoot.nixosModules.program.hyprland.home-manager
+          flakeRoot.nixosModules.program.flameshot
         ];
 
         home.stateVersion = "24.05";
@@ -40,6 +41,10 @@
           ];
           allowOther = true; # allows other users, such as root, to access files
         };
+
+	home.packages = with pkgs; [
+	  telegram-desktop
+	];
 
         programs.git = {
           enable = true;

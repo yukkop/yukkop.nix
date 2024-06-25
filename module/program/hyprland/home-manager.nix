@@ -11,6 +11,7 @@
 
       "$mod" = "SUPER";
       "$terminal" = "kitty";
+      "$screenshot" = "flameshot";
       "$menu" = "rofi -show drun -show-icons";
 
       monitor = ",preferred,auto,auto";
@@ -75,11 +76,12 @@
       "$ws10" = "rare";
 
       bind = [
-	"$mod, T, exec, $terminal"
+	"$mod, RETURN, exec, $terminal"
 	"$mod, X, exit"
 	"$mod, C, killactive"
 	"$mod, SPACE, togglefloating"
 	"$mod, D, exec, $menu"
+	", code:107, exec, $screenshot"
 
 	# move focus
 	"$mod, H, movefocus, l"
