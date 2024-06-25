@@ -26,6 +26,10 @@
         })
       )
 
+      /* starter */
+      #wofi
+      rofi-wayland
+
       /* Notification deamon */
       dunst
       libnotify # dependensy

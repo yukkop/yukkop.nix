@@ -6,11 +6,12 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
-      ../platform/lenovo-legion.nix
+    [ 
+      # Include the results of the hardware scan.
+      flakeRoot.nixosModules.platform.lenovo-legion
 
       inputs.disko.nixosModules.default
-      (import ../../disko.nix { device = "/dev/nvme0n1"; })
+      (flakeRoot.nixosModules.disko.lenovo-legion { device = "/dev/nvme0n1"; })
 
       inputs.impermanence.nixosModules.impermanence
       flakeRoot.nixosModules.user.yukkop
