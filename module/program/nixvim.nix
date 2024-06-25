@@ -15,7 +15,11 @@
       lsp = {
         enable = true;
         servers = { 
-          rust-analyzer.enable = true;
+          rust-analyzer = { 
+	    enable = true;
+	    installRustc = false;
+	    installCargo = false;
+	  };
         };
       };
     };

@@ -21,7 +21,6 @@
           inputs.impermanence.nixosModules.home-manager.impermanence
           (flakeRoot.nixosModules.program.nixvim { homeManager = true; nixvim = inputs.nixvim; })
           flakeRoot.nixosModules.program.hyprland.home-manager
-          flakeRoot.nixosModules.program.qutebrowser
         ];
 
         home.stateVersion = "24.05";

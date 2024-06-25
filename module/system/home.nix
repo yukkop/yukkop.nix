@@ -3,7 +3,9 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 { config, lib, pkgs, inputs, flakeRoot, ... }:
-
+let 
+  user = "yukkop";
+in
 {
   imports =
     [ 
@@ -18,6 +20,9 @@
       (flakeRoot.nixosModules.program.nixvim { nixvim = inputs.nixvim; })
 
       flakeRoot.nixosModules.program.hyprland.default
+
+      #(flakeRoot.nixosModules.program.steam { userName = user; pkgs = pkgs; })
+      (flakeRoot.nixosModules.program.qutebrowser { userName = user; pkgs = pkgs; })
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
