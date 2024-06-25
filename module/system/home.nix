@@ -15,6 +15,8 @@
       inputs.impermanence.nixosModules.impermanence
       flakeRoot.nixosModules.user.yukkop
       (flakeRoot.nixosModules.program.nixvim { nixvim = inputs.nixvim; })
+
+      flakeRoot.nixosModules.program.hyprland.default
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -91,7 +93,10 @@
     };
   };
 
-  networking.hostName = "home";
+  programs.bash.shellAliases = {
+    nr = "sudo nixos-rebuild switch --flake /persist/nixos#home";
+  };
+
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.

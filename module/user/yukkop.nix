@@ -20,8 +20,8 @@
         imports = [
           inputs.impermanence.nixosModules.home-manager.impermanence
           (flakeRoot.nixosModules.program.nixvim { homeManager = true; nixvim = inputs.nixvim; })
+          flakeRoot.nixosModules.program.hyprland.home-manager
         ];
-
 
         home.stateVersion = "24.05";
 
@@ -56,4 +56,3 @@
     };
   };
 }
-
