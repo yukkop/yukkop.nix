@@ -1,6 +1,10 @@
-{ inputs, ...}: {
+{ homeManager ? false, nixvim, ...}: {
   imports = [
-    inputs.nixvim.homeManagerModules.nixvim   
+    (
+      if homeManager 
+      then nixvim.homeManagerModules.nixvim 
+      else nixvim.nixosModules.nixvim
+    )   
   ];
 
   # TODO: take out this to funktion and use for both homeManagerModules.nixvim and modules.nixvim
@@ -15,6 +19,5 @@
         };
       };
     };
-    colorschemes.gruvbox.enable = true; 
   };
 }

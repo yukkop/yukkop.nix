@@ -2,18 +2,19 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, flakeRoot, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./home/hardware-configuration.nix
+      ../platform/lenovo-legion.nix
 
       inputs.disko.nixosModules.default
       (import ../../disko.nix { device = "/dev/nvme0n1"; })
 
       inputs.impermanence.nixosModules.impermanence
-      inputs.home-manager.nixosModules.default
+      flakeRoot.nixosModules.user.yukkop
+      (flakeRoot.nixosModules.program.nixvim { nixvim = inputs.nixvim; })
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -49,12 +50,6 @@
 
   users.groups.owner = {};
 
-  users.users."yukkop" = {
-   isNormalUser = true;
-   initialPassword = "kk";
-   extraGroups = [ "wheel" "docker" "owner" ];
-  };
-
   fileSystems."/persist".neededForBoot = true;
   environment.persistence."/persist/system" = {
     hideMounts = true;
@@ -83,15 +78,7 @@
 
     # home manager impermanence  permisions
     "d /persist/home/ 1777 root root - -"
-    "d /persist/home/yukkop 0770 yukkop users - -"
   ];
-  home-manager = {
-    extraSpecialArgs = {inherit inputs;};
-    users = {
-      "yukkop" = import ../user/yukkop.nix;
-
-    };
-  };
 
   services.openssh = {
     enable = true;
@@ -206,6 +193,4 @@
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "24.05"; # Did you read the comment?
-
 }
-

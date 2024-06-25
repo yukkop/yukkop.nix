@@ -57,7 +57,7 @@
         config = self.lib.defaultConfig nixpkgs-unstable;
       });
 
-      nixosModlules = self.lib.readModulesRecursive' ./module;
+      nixosModules = self.lib.readModulesRecursive ./module;
 
       #nixosConfigurations.home = nixpkgs-unstable.lib.nixosSystem {
       #  system = "x86_64-linux";

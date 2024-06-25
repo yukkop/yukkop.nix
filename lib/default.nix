@@ -1,4 +1,10 @@
 { self, inputs, flake, lib, ... }: rec {
+
+  /* For knowing if the repo is locked */
+  isLocked = !(builtins.readFile ../locked == "0");
+  ifUnlocked = lib.optional (!isLocked);
+
+
   defaultConfig = nixpkgs: {
     allowUnfreePredicate = nixpkgs: [
     ];
@@ -37,41 +43,56 @@
     });
   };
 
+  #readModulesRecursive = path:
+  #  lib.mapAttrs' (
+  #    name: value: let
+  #      name' = builtins.replaceStrings [".nix"] [""] name;
+  #    in
+  #      if value == "regular"
+  #      then {
+  #        name = name';
+  #        value = import "${path}/${name}";
+  #      }
+  #      else {
+  #        inherit name;
+  #        value = readModulesRecursive "${path}/${name}";
+  #      }
+  #  ) (builtins.readDir path);
+
   readModulesRecursive = path:
     lib.mapAttrs' (
       name: value: let
-        name' = builtins.replaceStrungs [".nix"] [""] name;
+        name' = builtins.replaceStrings [".nix"] [""] name;
       in
         if value == "regular"
-	then {
-	  name = name';
-	  value = import "${path}/${name}";
-	}
-	else {
-	  inherit name;
-	  value = readModulesRecursive "${path}/${name}";
-	}
+        then {
+          name = name';
+          value = import "${path}/${name}";
+        }
+        else {
+          inherit name;
+          value = readModulesRecursive "${path}/${name}";
+        }
     ) (builtins.readDir path);
 
-    readModulesRecursive' = path:
-      with lib;
-      with builtins; let
-        path = pipe "${path}" [
-	  (filesystem.listFilesRecursive)
-	  (filter (hasSuffix ".nix"))
-	];
-	pathToName = flip pipe [
-	  (removePrefix "${path}/")
-	  (replaceStrings ["/" ".nix"] ["." ""])
-	  (removeSuffix ".nix")
-	];
-	
-	attrList = 
-	  map (path': {
-	    name = pathRoName (unsafeDiscordStringContext path');
-	    value = import path';
-	  })
-	  paths;
-       in
-         listToAttrs attrList;
+readModulesRecursive' = path:
+    with lib;
+    with builtins; let
+      paths = pipe "${path}" [
+        (filesystem.listFilesRecursive)
+        (filter (hasSuffix ".nix"))
+      ];
+      pathToName = flip pipe [
+        (removePrefix "${path}/")
+        (replaceStrings ["/" ".nix"] ["." ""])
+        (removeSuffix ".nix")
+      ];
+      attrList =
+        map (path': {
+          name = pathToName (unsafeDiscardStringContext path');
+          value = import path';
+        })
+        paths;
+    in
+      listToAttrs attrList;
 }
