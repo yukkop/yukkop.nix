@@ -6,6 +6,7 @@
     nixpkgs-24-05.url = "github:nixos/nixpkgs/nixos-24.05";
 
     hyprland.url = "github:hyprwm/Hyprland";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     nixvim = {
       #url = "github:nix-community/nixvim/nixos-24.05";
@@ -57,7 +58,7 @@
       
       legacyPackages = forAllSystems (system: import nixpkgs-unstable {
         inherit system;
-        overlays = [ self.overlays.default ];
+        overlays = [ /* self.overlays.default */ ];
         config = self.lib.defaultConfig nixpkgs-unstable;
       });
 
