@@ -41,7 +41,9 @@
 	    ".config/qutebrowser" # TODO: in qutebrowser module
 	    ".local/share/qutebrowser"
 	    ".local/share/Steam" # TODO: in steam module
+	    ".local/share/TelegramDesktop" # TODO: in telegram module
           ];
+
           files = [
             "dw" # link to Downloads
           ];

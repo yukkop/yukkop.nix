@@ -27,6 +27,7 @@ in
 
       (flakeRoot.nixosModules.program.steam { userName = user; pkgs = pkgs; })
       (flakeRoot.nixosModules.program.qutebrowser { userName = user; pkgs = pkgs; })
+      (flakeRoot.nixosModules.program.minecraft { userName = user; pkgs = pkgs; })
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];

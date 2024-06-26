@@ -11,6 +11,7 @@
 
       "$mod" = "SUPER";
       "$terminal" = "kitty";
+      "$browser" = "qutebrowser";
       "$screenshot" = "${screenshotCommand}";
       "$menu" = "rofi -show drun -show-icons";
 
@@ -59,7 +60,8 @@
       };
 
       exec-once = [
-        "$terminal"
+        "[workspace name:term] $terminal"
+        "[workspace name:term] $terminal"
       ];
 
       bindm = [
@@ -78,6 +80,12 @@
       "$ws8" = "record";
       "$ws9" = "lauch";
       "$ws10" = "rare";
+
+      workspace = [
+        "name:$ws1, on-create-empty:[float] $terminal"
+        "name:$ws2, on-create-empty:[float] $browser"
+      ];
+
 
       bind = [
 	"$mod, RETURN, exec, $terminal"
