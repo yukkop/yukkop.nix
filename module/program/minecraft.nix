@@ -1,4 +1,4 @@
-{ userName, pkgs, ... }: {
+userName: { pkgs, ... }: {
   /*  */
 
   home-manager.users."${userName}" = {

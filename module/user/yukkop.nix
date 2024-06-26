@@ -1,8 +1,17 @@
 { persist ? false, pkgs, inputs, flakeRoot ? null, flakeRootPath, ... }:
+let 
+  user = "yukkop";
+in
 {
   imports = [
     inputs.home-manager.nixosModules.default
+    (flakeRoot.nixosModules.program.qutebrowser user)
+    (flakeRoot.nixosModules.program.steam user)
+    (flakeRoot.nixosModules.program.minecraft user)
   ];
+
+  programs.qutebrowser.enable = true;
+  programs.qutebrowser.persistence = true;
 
   users.users."yukkop" = {
    isNormalUser = true;
@@ -38,13 +47,10 @@
             "dc"
             "vd"
             ".ssh"
-	    ".config/qutebrowser" # TODO: in qutebrowser module
-	    ".local/share/qutebrowser"
-	    ".local/share/Steam" # TODO: in steam module
 	    ".local/share/TelegramDesktop" # TODO: in telegram module
           ];
-
           files = [
+	    # FIXME simlynks issue
             "dw" # link to Downloads
           ];
           allowOther = true; # allows other users, such as root, to access files
@@ -53,6 +59,7 @@
 	home.packages = with pkgs; [
 	  telegram-desktop
 	  discord
+	  htop
 	];
 
         programs.git = {

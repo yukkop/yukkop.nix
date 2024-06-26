@@ -12,23 +12,19 @@ in
   nixpkgs.config.allowUnfree = true;
 
   imports =
-    [ 
-      # Include the results of the hardware scan.
-      flakeRoot.nixosModules.platform.lenovo-legion
+  [ 
+    # Include the results of the hardware scan.
+    flakeRoot.nixosModules.platform.lenovo-legion
 
-      inputs.disko.nixosModules.default
-      (flakeRoot.nixosModules.disko.lenovo-legion { device = "/dev/nvme0n1"; })
+    inputs.disko.nixosModules.default
+    (flakeRoot.nixosModules.disko.lenovo-legion { device = "/dev/nvme0n1"; })
 
-      inputs.impermanence.nixosModules.impermanence
-      flakeRoot.nixosModules.user.yukkop
-      (flakeRoot.nixosModules.program.nixvim { nixvim = inputs.nixvim; })
+    inputs.impermanence.nixosModules.impermanence
+    flakeRoot.nixosModules.user.yukkop
+    (flakeRoot.nixosModules.program.nixvim { nixvim = inputs.nixvim; })
 
-      flakeRoot.nixosModules.program.hyprland.default
-
-      (flakeRoot.nixosModules.program.steam { userName = user; pkgs = pkgs; })
-      (flakeRoot.nixosModules.program.qutebrowser { userName = user; pkgs = pkgs; })
-      (flakeRoot.nixosModules.program.minecraft { userName = user; pkgs = pkgs; })
-    ];
+    flakeRoot.nixosModules.program.hyprland.default
+  ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
