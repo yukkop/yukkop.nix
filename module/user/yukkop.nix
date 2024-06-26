@@ -51,7 +51,6 @@
 	home.packages = with pkgs; [
 	  telegram-desktop
 	  discord
-	  sway
 	];
 
         programs.git = {

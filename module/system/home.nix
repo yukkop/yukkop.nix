@@ -164,7 +164,6 @@ in
   environment.systemPackages = with pkgs; [
     tmux
     blender
-    #vscode
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
