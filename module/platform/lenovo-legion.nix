@@ -6,7 +6,7 @@
 {
   imports = [  
     (modulesPath + "/installer/scan/not-detected.nix")
-    #inputs.nixos-hardware.nixosModules.lenovo-ideapad-15arh05
+    inputs.nixos-hardware.nixosModules.lenovo-ideapad-16ach6
   ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "usbhid" "sd_mod" ];

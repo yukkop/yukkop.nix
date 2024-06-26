@@ -7,6 +7,10 @@ let
   user = "yukkop";
 in
 {
+  services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
+
+  nixpkgs.config.allowUnfree = true;
+
   imports =
     [ 
       # Include the results of the hardware scan.
@@ -21,7 +25,7 @@ in
 
       flakeRoot.nixosModules.program.hyprland.default
 
-      #(flakeRoot.nixosModules.program.steam { userName = user; pkgs = pkgs; })
+      (flakeRoot.nixosModules.program.steam { userName = user; pkgs = pkgs; })
       (flakeRoot.nixosModules.program.qutebrowser { userName = user; pkgs = pkgs; })
     ];
 

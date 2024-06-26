@@ -38,6 +38,9 @@
             "dc"
             "vd"
             ".ssh"
+	    ".config/qutebrowser" # TODO: in qutebrowser module
+	    ".local/share/qutebrowser"
+	    ".local/share/Steam" # TODO: in steam module
           ];
           files = [
             "dw" # link to Downloads
@@ -47,6 +50,8 @@
 
 	home.packages = with pkgs; [
 	  telegram-desktop
+	  discord
+	  sway
 	];
 
         programs.git = {
