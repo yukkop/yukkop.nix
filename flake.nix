@@ -64,18 +64,25 @@
 
       nixosModules = self.lib.readModulesRecursive ./module;
 
-      nixpkgs-unstable.config.allowUnfree = true;
+      nixosConfigurations.home = nixpkgs-24-05.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = {inherit inputs flakeRootPath; flakeRoot = self;};
+        modules = [
+          #self.nixosModules.system.home
+	  ./module/system/home.nix
+        ];
+      };
 
-      nixosConfigurations = let 
-        mkNixosConfiguration = self.lib.mkNixosConfiguration ./module;
-      in builtins.listToAttrs [
-        (mkNixosConfiguration nixpkgs-24-05 "home" {
-	  system = "x86_64-linux";
-	  specialArgs = {
-            inherit inputs flakeRootPath;
-	    flakeRoot = self;
-	  };
-	})
-      ];
+      #nixosConfigurations = let 
+      #  mkNixosConfiguration = self.lib.mkNixosConfiguration ./module;
+      #in builtins.listToAttrs [
+      #  (mkNixosConfiguration nixpkgs-24-05 "home" {
+      #    system = "x86_64-linux";
+      #    specialArgs = {
+      #      inherit inputs flakeRootPath;
+      #      flakeRoot = self;
+      #    };
+      #  })
+      #];
     };
 }
