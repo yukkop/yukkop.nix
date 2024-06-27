@@ -63,6 +63,8 @@ in
 	  telegram-desktop
 	  discord
 	  htop
+	  obs-studio
+	  mpv
 	];
 
         programs.git = {

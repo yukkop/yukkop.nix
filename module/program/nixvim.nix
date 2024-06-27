@@ -81,6 +81,8 @@
 	  };
 	  /* C */
 	  clangd.enable = true;
+          /* TS, JS */
+          tsserver.enable = true;
         };
       };
     };
