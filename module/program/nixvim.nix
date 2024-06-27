@@ -34,6 +34,7 @@
 	  "<leader>li" = "implementation";
 	  "<leader>lt" = "type_definition";
 	  "<leader>lf" = "format";
+	  "<leader>la" = "code_action";
 	};
         servers = { 
 	  /* Rust */

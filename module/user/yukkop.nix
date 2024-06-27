@@ -8,6 +8,7 @@ in
     (flakeRoot.nixosModules.program.qutebrowser user)
     (flakeRoot.nixosModules.program.steam user)
     (flakeRoot.nixosModules.program.minecraft user)
+    (flakeRoot.nixosModules.program.youtube.youtube-dl user)
   ];
 
   programs.qutebrowser.enable = true;
@@ -48,6 +49,8 @@ in
             "vd"
             ".ssh"
 	    ".local/share/TelegramDesktop" # TODO: in telegram module
+	    ".config/tmux" # TODO: in tmux module
+	    ".tmux" # TODO: in tmux module
           ];
           files = [
 	    # FIXME simlynks issue

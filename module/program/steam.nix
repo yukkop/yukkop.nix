@@ -9,6 +9,7 @@
     home.persistence."/persist/home/yukkop" = {
       directories = [
         ".local/share/Steam"
+        ".steam"
       ];
       allowOther = true;
     };
