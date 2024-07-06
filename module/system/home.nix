@@ -64,6 +64,7 @@ in
     hideMounts = true;
     directories = [
       "/etc/nixos"
+      "/etc/ssh"
       "/var/log"
       "/var/lib/bluetooth"
       # TODO: check if this is exist
