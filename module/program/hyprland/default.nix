@@ -20,7 +20,7 @@
     };
     systemPackages = with pkgs; [
       /* Bar sulution */
-      #eww
+      eww
       (waybar.overrideAttrs (oldAttrs: {
           mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
         })
@@ -47,7 +47,8 @@
   };
 
   security.rtkit.enable = true;
-  services.pipewire = {
+  # nessesary for obs?
+  services.pipewire = { 
     enable = true;
   };
 }

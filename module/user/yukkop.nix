@@ -7,8 +7,10 @@ in
     inputs.home-manager.nixosModules.default
     (flakeRoot.nixosModules.program.qutebrowser user)
     (flakeRoot.nixosModules.program.steam user)
+    (flakeRoot.nixosModules.program.obs-studio user)
     (flakeRoot.nixosModules.program.minecraft user)
     (flakeRoot.nixosModules.program.youtube.youtube-dl user)
+    (flakeRoot.nixosModules.program.discord user)
   ];
 
   programs.qutebrowser.enable = true;
@@ -28,13 +30,12 @@ in
     users = {
       "yukkop" = {
         imports = let 
-          #screenshoter = flakeRoot.nixosModules.program.screenshot.wayland-way;
 	  screenshoter = import ../program/screenshot/wayland-way.nix;
 	in [
           inputs.impermanence.nixosModules.home-manager.impermanence
           (flakeRoot.nixosModules.program.nixvim { homeManager = true; nixvim = inputs.nixvim; })
-          (flakeRoot.nixosModules.program.hyprland.home-manager { screenshotCommand = ""; })
-	  #screenshoter.module pkgs
+          (flakeRoot.nixosModules.program.hyprland.home-manager { screenshotCommand = "grim -g \"''$(slurp)\" - | swappy -f"; })
+	  screenshoter
         ];
 
         home.stateVersion = "24.05";
@@ -46,6 +47,7 @@ in
             "ms"
             "pc"
             "dc"
+	    "mn"
             "vd"
             ".ssh"
 	    ".local/share/TelegramDesktop" # TODO: in telegram module
@@ -61,9 +63,7 @@ in
 
 	home.packages = with pkgs; [
 	  telegram-desktop
-	  discord
 	  htop
-	  obs-studio
 	  mpv
 	];
 

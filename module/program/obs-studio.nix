@@ -1,15 +1,14 @@
- userName: { pkgs, ... }: {
+userName: { pkgs, ... }: {
   /*  */
 
   home-manager.users."${userName}" = {
     home.packages = with pkgs; [
-      steam
+      obs-studio
     ];
 
     home.persistence."/persist/home/yukkop" = {
       directories = [
-        ".local/share/Steam"
-        #".steam"
+        ".config/obs-studio"
       ];
       allowOther = true;
     };

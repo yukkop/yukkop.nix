@@ -15,10 +15,13 @@
       "$screenshot" = "${screenshotCommand}";
       "$menu" = "rofi -show drun -show-icons";
 
+      "$monitor1" = "eDP-1";
+      "$monitor2" = "HDMI-A-1";
+
       monitor = [ 
         #",preferred,auto,auto"
-	"eDP-1, 1920x1080@120, 0x0, 1"
-        "HDMI-A-1, 1920x1080, -1920x0, 1"
+	"$monitor1, 1920x1080@120, 0x0, 1"
+        "$monitor2, 1920x1080, -1920x0, 1"
       ];
 
       env = [
@@ -60,8 +63,9 @@
       };
 
       exec-once = [
-        "[workspace name:term] $terminal"
-        "[workspace name:term] $terminal"
+        "[workspace name:term silent] $terminal"
+        "[workspace name:web silent] $browser"
+	#"waybar"
       ];
 
       bindm = [
@@ -82,8 +86,15 @@
       "$ws10" = "rare";
 
       workspace = [
-        "name:$ws1, on-create-empty:[float] $terminal"
-        "name:$ws2, on-create-empty:[float] $browser"
+        "name:$ws1, on-create-empty:$terminal, monitor:$monitor1, default:true"
+        "name:$ws2, on-create-empty:$browser, monitor:$monitor2, default:true"
+        #"name:$ws3, "
+        #"name:$ws4, "
+        #"name:$ws5, "
+        #"name:$ws6, "
+        #"name:$ws7, "
+        #"name:$ws8, "
+        #"name:$ws9, "
       ];
 
 
@@ -111,7 +122,6 @@
 	"$mod, 7, workspace, name:$ws7"
 	"$mod, 8, workspace, name:$ws8"
 	"$mod, 9, workspace, name:$ws9"
-	"$mod, 10, workspace, name:$ws10"
 
 	# Move active window to a workspace
 	"$mod SHIFT, 1, movetoworkspace, name:$ws1"
@@ -123,7 +133,6 @@
 	"$mod SHIFT, 7, movetoworkspace, name:$ws7"
 	"$mod SHIFT, 8, movetoworkspace, name:$ws8"
 	"$mod SHIFT, 9, movetoworkspace, name:$ws9"
-	"$mod SHIFT, 10, movetoworkspace, name:$ws10"
       ];
     };
   };

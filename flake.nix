@@ -64,25 +64,30 @@
 
       nixosModules = self.lib.readModulesRecursive ./module;
 
-      nixosConfigurations.home = nixpkgs-24-05.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {inherit inputs flakeRootPath; flakeRoot = self;};
-        modules = [
-          #self.nixosModules.system.home
-	  ./module/system/home.nix
-        ];
-      };
+      #nixosConfigurations.home = nixpkgs-24-05.lib.nixosSystem {
+      #  system = "x86_64-linux";
+      #  specialArgs = {inherit inputs flakeRootPath; flakeRoot = self;};
+      #  modules = [
+      #    #self.nixosModules.system.home
+      #    ./module/system/home.nix
+      #  ];
+      #};
 
-      #nixosConfigurations = let 
-      #  mkNixosConfiguration = self.lib.mkNixosConfiguration ./module;
-      #in builtins.listToAttrs [
-      #  (mkNixosConfiguration nixpkgs-24-05 "home" {
-      #    system = "x86_64-linux";
-      #    specialArgs = {
-      #      inherit inputs flakeRootPath;
-      #      flakeRoot = self;
-      #    };
-      #  })
-      #];
+      # CRITICAL: if you try install unfree package wthout
+      # config = { allowUnfree = true; };
+      # this string, it will return strange unreadble error
+      # allowing unfree in any another place does not fix it
+      nixosConfigurations = let 
+        mkNixosConfiguration = self.lib.mkNixosConfiguration ./module;
+      in builtins.listToAttrs [
+        (mkNixosConfiguration nixpkgs-24-05 "home" {
+	  config = { allowUnfree = true; };
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs flakeRootPath;
+            flakeRoot = self;
+          };
+        })
+      ];
     };
 }

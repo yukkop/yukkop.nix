@@ -4,8 +4,6 @@
 
 { config, lib, pkgs, inputs, flakeRoot, ... }:
 {
-  nixpkgs.config.allowUnfree = true;
-
   imports =
   [ 
     # Include the results of the hardware scan.
@@ -97,6 +95,7 @@
   };
 
   programs.bash.shellAliases = {
+    mpvf = "mpv --osd-msg1='\${estimated-frame-number} / \${estimated-frame-count}'";
     nr = "sudo nixos-rebuild switch --flake /persist/nixos#home";
     nrb = "sudo nixos-rebuild boot --flake /persist/nixos#home";
   };
@@ -158,13 +157,25 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     blender
+    man-pages
+    man-pages-posix
+    man-db
+    ffmpeg
   ];
+
+  documentation.dev.enable = true;
+  documentation.man = {
+    # In order to enable to mandoc man-db has to be disabled.
+    man-db.enable = false;
+    mandoc.enable = true;
+  };
 
   programs.tmux = {
     enable = true;
     plugins = with pkgs.tmuxPlugins; [ resurrect continuum ];
     extraConfig = ''
     # ressurect
+    set -g @resurrect-strategy-vim 'session'
     set -g @resurrect-strategy-nvim 'session'
     set -g @resurrect-capture-pane-contents 'on'
 
