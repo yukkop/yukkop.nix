@@ -1,6 +1,11 @@
 { persist ? false, pkgs, inputs, flakeRoot ? null, flakeRootPath, ... }:
 let 
   user = "yukkop";
+  shellAliases = {
+    dev = "nix develop -c zsh";
+    hlog = "cat $XDG_RUNTIME_DIR/hypr/$(ls -t $XDG_RUNTIME_DIR/hypr/ | head -n 2 | tail -n 1)/hyprland.log";
+    ttyhlog = "cat $XDG_RUNTIME_DIR/hypr/$(ls -t $XDG_RUNTIME_DIR/hypr/ | head -n 1)/hyprland.log";
+  };
 in
 {
   imports = [
@@ -52,6 +57,7 @@ in
             ".ssh"
 	    ".local/share/TelegramDesktop" # TODO: in telegram module
 	    ".config/tmux" # TODO: in tmux module
+	    "zsh/history"
 	    ".tmux" # TODO: in tmux module
           ];
           files = [
@@ -66,6 +72,34 @@ in
 	  htop
 	  mpv
 	];
+
+	programs = {
+	  bash = {
+	    shellAliases = shellAliases;
+	  };
+	  zsh = {
+            enable = true;
+            enableCompletion = true;
+            autosuggestion.enable = true;
+            syntaxHighlighting.enable = true;
+          
+	    shellAliases = shellAliases;
+            history = {
+              size = 10000;
+              path = "$HOME/zsh/history";
+            };
+            oh-my-zsh = {
+              enable = true;
+              #plugins = [ "git" "thefuck" ];
+              #theme = "fox";
+	      #theme = "imajes";
+	      theme = "terminalparty";
+	      #theme = "itchy"
+	      #theme = "kardan"
+	      #theme = "nicoulaj"
+            };
+          };
+	};
 
         programs.git = {
           enable = true;

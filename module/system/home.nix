@@ -3,6 +3,13 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 { config, lib, pkgs, inputs, flakeRoot, ... }:
+let
+  shellAliases = {
+    mpvf = "mpv --osd-msg1='\${estimated-frame-number} / \${estimated-frame-count}'";
+    nr = "sudo nixos-rebuild switch --flake /persist/nixos#home";
+    nrb = "sudo nixos-rebuild boot --flake /persist/nixos#home";
+  };
+in
 {
   imports =
   [ 
@@ -94,10 +101,10 @@
     };
   };
 
-  programs.bash.shellAliases = {
-    mpvf = "mpv --osd-msg1='\${estimated-frame-number} / \${estimated-frame-count}'";
-    nr = "sudo nixos-rebuild switch --flake /persist/nixos#home";
-    nrb = "sudo nixos-rebuild boot --flake /persist/nixos#home";
+  programs.bash.shellAliases = shellAliases;
+  programs.zsh = {
+    enable = true;
+    shellAliases = shellAliases;
   };
 
   # Pick only one of the below networking options.

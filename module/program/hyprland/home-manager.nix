@@ -4,6 +4,8 @@
   wayland.windowManager.hyprland = {
     enable = true;
 
+
+
     settings = {
       decoration = {
         shadow_offset = "0 5";
@@ -103,7 +105,8 @@
 	"$mod, X, exit"
 	"$mod, C, killactive"
 	"$mod, SPACE, togglefloating"
-	"$mod, D, exec, $menu"
+	"$mod CONTROL_L, B, exec, $menu"
+	"$mod, F, fullscreen"
 	", code:107, exec, $screenshot"
 
 	# move focus

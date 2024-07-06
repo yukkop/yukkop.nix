@@ -88,6 +88,17 @@
             flakeRoot = self;
           };
         })
+
+        (mkNixosConfiguration nixpkgs-24-05 "tenix" {
+	  config = { };
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs flakeRootPath;
+            flakeRoot = self;
+          };
+        })
       ];
     };
+
+
 }
