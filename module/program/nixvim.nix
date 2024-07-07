@@ -10,9 +10,32 @@
   # TODO: take out this to funktion and use for both homeManagerModules.nixvim and modules.nixvim
   programs.nixvim = {
     enable = true;
-    extraConfigLua = ''
+    colorschemes.kanagawa.enable = true;
+    # 
+    extraConfigLuaPre = ''
+      vim.api.nvim_set_keymap("", "<Space>", "<Nop>", { noremap = true, silent = true })
       vim.g.mapleader = ' '
     '';
+    keymaps = [
+      {
+        mode = "n";
+        key = "<leader>dd";
+        #options.silent = true;
+        action = "<cmd>lua vim.diagnostic.open_float()<CR>";
+      }
+      {
+        mode = "n";
+        key = "<leader>dn";
+        #options.silent = true;
+        action = "<cmd>lua vim.diagnostic.goto_next()<CR>";
+      }
+      {
+        mode = "n";
+        key = "<leader>dp";
+        #options.silent = true;
+        action = "<cmd>lua vim.diagnostic.goto_prev()<CR>";
+      }
+    ];
     plugins = {
       oil.enable = true;
       #keymaps = [

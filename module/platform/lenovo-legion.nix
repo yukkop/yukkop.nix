@@ -6,7 +6,11 @@
 {
   imports = [  
     (modulesPath + "/installer/scan/not-detected.nix")
-    inputs.nixos-hardware.nixosModules.lenovo-ideapad-16ach6
+    inputs.nixos-hardware.nixosModules.lenovo-ideapad-15arh7
+  ];
+
+  environment.systemPackages = with pkgs; [
+    vulkan-tools
   ];
 
   /* boot */
@@ -29,6 +33,21 @@
     #"nouveau" # open source nvidia
     #"amdgpu" # probably useles with nvidia optimus prime
   ];
+
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      vulkan-loader
+      vulkan-validation-layers
+      vulkan-extension-layer
+    ];
+  };
+
+  #environment.variables.VK_DRIVER_FILES=/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json;
+  #environment.sessionVariables.VK_DRIVER_FILES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
+
 
   hardware.nvidia = {
     # Modesetting is required.

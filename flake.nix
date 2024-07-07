@@ -6,13 +6,13 @@
     nixpkgs-24-05.url = "github:nixos/nixpkgs/nixos-24.05";
 
     hyprland.url = "github:hyprwm/Hyprland";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware.url = "github:yukkop/nixos-hardware/b4497d9a077c777d9a7941517b7ef5045c3e873b";
 
     nixvim = {
-      #url = "github:nix-community/nixvim/nixos-24.05";
-      #inputs.nixpkgs.follows = "nixpkgs-24-05";
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:nix-community/nixvim/nixos-24.05";
+      inputs.nixpkgs.follows = "nixpkgs-24-05";
+      #url = "github:nix-community/nixvim";
+      #inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     deploy-rs = {
@@ -81,7 +81,7 @@
         mkNixosConfiguration = self.lib.mkNixosConfiguration ./module;
       in builtins.listToAttrs [
         (mkNixosConfiguration nixpkgs-24-05 "home" {
-	  config = { allowUnfree = true; };
+          config = { allowUnfree = true; };
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs flakeRootPath;
@@ -90,7 +90,7 @@
         })
 
         (mkNixosConfiguration nixpkgs-24-05 "tenix" {
-	  config = { };
+          config = { };
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs flakeRootPath;
