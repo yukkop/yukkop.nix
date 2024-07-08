@@ -35,7 +35,7 @@
     };
   };
 
-  outputs = {self, nixpkgs-24-05, nixpkgs-unstable, ...} @ inputs: 
+  outputs = {self, nixpkgs-24-05, nixpkgs-unstable, deploy-rs, ...} @ inputs: 
   let
     flakeRootPath = ./.;
   
@@ -98,7 +98,22 @@
           };
         })
       ];
+
+      # --- Deployments
+      # nix run nixpkgs#deploy-rs -- -s --remote-build .#tenix.system -- --verbose
+      deploy.nodes.tenix = let
+        inherit (self.nixosConfigurations.tenix.config.nixpkgs) system;
+      in {
+        hostname = "tenix";
+        fastConnection = true;
+        profilesOrder = [ "system" ];
+        #sshOpts = [ ];
+        profiles."system" = {
+          sshUser = "root";
+          path = deploy-rs.lib.${system}.activate.nixos
+            self.nixosConfigurations.tenix;
+          user = "root";
+        };
+      };
     };
-
-
 }

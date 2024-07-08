@@ -10,7 +10,27 @@
   # TODO: take out this to funktion and use for both homeManagerModules.nixvim and modules.nixvim
   programs.nixvim = {
     enable = true;
-    colorschemes.kanagawa.enable = true;
+    colorschemes.kanagawa = {
+      enable = true;
+      settings = {
+      colors.theme = {
+        all = {
+	  ui = {
+            #bg_gutter = "none";
+            #bg = "none";
+	  };
+          #float = {
+          #  bg = "none";
+	  #};
+	};
+      };
+      #background = {
+      #  light = null;
+      #  dark = null;
+      #};
+      };
+    };
+    #colorschemes.nightfox.enable = true;
     # 
     extraConfigLuaPre = ''
       vim.api.nvim_set_keymap("", "<Space>", "<Nop>", { noremap = true, silent = true })
