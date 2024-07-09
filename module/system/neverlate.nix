@@ -2,26 +2,18 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, inputs, flakeRoot, ... }:
+{ config, lib, pkgs, inputs, flakeRoot, modulesPath, ... }:
 let
   shellAliases = {
+    nr = "sudo nixos-rebuild switch --flake /persist/nixos#home";
+    nrb = "sudo nixos-rebuild boot --flake /persist/nixos#home";
   };
 in
 {
   imports =
   [ 
-    # Include the results of the hardware scan.
-    flakeRoot.nixosModules.platform.lenovo-legion
+    flakeRoot.nixosModules.platform.hetzner-amd2
     flakeRoot.nixosModules.program.tmux
-
-    inputs.disko.nixosModules.default
-    (flakeRoot.nixosModules.disko.lenovo-legion { device = "/dev/nvme0n1"; })
-
-    inputs.impermanence.nixosModules.impermanence
-    flakeRoot.nixosModules.user.yukkop
-    (flakeRoot.nixosModules.program.nixvim { nixvim = inputs.nixvim; })
-
-    flakeRoot.nixosModules.program.hyprland.default
   ];
 
   users.defaultUserShell = pkgs.zsh;
@@ -29,65 +21,12 @@ in
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  boot.initrd.postDeviceCommands = lib.mkAfter ''
-    mkdir /btrfs_tmp
-    mount /dev/root_vg/root /btrfs_tmp
-    if [[ -e /btrfs_tmp/root ]]; then
-      mkdir -p /btrfs_tmp/old_roots
-      timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
-      mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$timestamp"
-    fi
-
-    delete_subvolume_recursively() {
-      IFS=$'\n'
-      for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-        delete_subvolume_recursively "/btrfs_tmp/$i"
-      done
-      btrfs subvolume delete "$1"
-    }
-
-    for i in $(find /btrfs_tmp/old_roots/ -maxdepth 1 -mtime +30); do
-      delete_subvolume_recursively "$i"
-    done
-
-    btrfs subvolume create /btrfs_tmp/root
-    umount /btrfs_tmp
-  '';
-
-  users.groups.owner = {};
-
-  fileSystems."/persist".neededForBoot = true;
-  environment.persistence."/persist/system" = {
-    hideMounts = true;
-    directories = [
-      "/etc/nixos"
-      "/etc/ssh"
-      "/var/log"
-      "/var/lib/bluetooth"
-      # TODO: check if this is exist
-      #"/var/lib/nixos"
-      "/var/lib/systemd/coredump"
-      "/etc/NetworkManager/systemd-connections"
-      { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
-    ];
-    files = [
-      "/etc/machine-id"
-      #{ file = "/var/keys/secret_file"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
-    ];
-  };
-
-  # something for impermanence work with home-manager
-  programs.fuse.userAllowOther = true;
-
-  systemd.tmpfiles.rules = [
-    # /persist/nixos posiblity access / change not only rooy
-    "d /persist/nixos/ 2777 root owner - -"
-
-    # home manager impermanence  permisions
-    "d /persist/home/ 1777 root root - -"
+  boot.tmp.cleanOnBoot = true;
+  zramSwap.enable = true;
+  networking.domain = "";
+  users.users.root.openssh.authorizedKeys.keys = [
+    ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCk/JHunqWTfBN2WJpXATwERJaOFXjyo6XuDCZ+AJ3y'' 
+    ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFa5x02qlKlW0IO0j/VVhlXWxKYcLutAx7fOtNwqVGLz yukkop@home'' 
   ];
 
   /* ssh */
@@ -98,7 +37,7 @@ in
       #AllowUsers = null;
       UseDns = true;
       X11Forwarding = false;
-      PermitRootLogin = "no";
+      PermitRootLogin = "without-password";
     };
   };
 
@@ -107,15 +46,6 @@ in
     enable = true;
     shellAliases = shellAliases;
   };
-
-  # TODO: x server
-  #services.xserver.xkb = {
-  #  layout = "us,ru";
-  #  #variant = "workman,";
-  #  options = "grp:alt_shift_toggle";
-  #};
-  # TODO: console
-  console.keyMap = "us";
 
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -172,13 +102,7 @@ in
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    blender
-    man-pages
-    man-pages-posix
-    man-db
-    ffmpeg
-  ];
+  environment.systemPackages = with pkgs; [ ];
 
   documentation.dev.enable = true;
   documentation.man = {

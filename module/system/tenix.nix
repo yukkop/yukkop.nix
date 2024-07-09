@@ -17,6 +17,8 @@ in
     #flakeRoot.nixosModules.program.nginx.nginx-rtmp
   ];
 
+  users.defaultUserShell = pkgs.zsh;
+
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Use the systemd-boot EFI boot loader.
@@ -109,8 +111,6 @@ in
     man-db.enable = false;
     mandoc.enable = true;
   };
-
-  users.defaultUserShell = pkgs.zsh;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

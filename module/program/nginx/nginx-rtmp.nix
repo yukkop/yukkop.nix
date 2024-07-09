@@ -85,8 +85,8 @@ in
             rtmp_stat_stylesheet stat.xsl;
           '';
 	};
-        locations."/stat.xsl" = {
-          alias = "/var/www/xsl/";
+        locations."=/stat.xsl" = {
+          alias = "/var/www/xsl/stat.xsl";
         };
         locations."/hls" = {
           root = "/tmp";

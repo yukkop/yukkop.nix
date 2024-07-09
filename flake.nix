@@ -104,6 +104,14 @@
             flakeRoot = self;
           };
         })
+        (mkNixosConfiguration nixpkgs-24-05 "neverlate" {
+          config = { };
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs flakeRootPath;
+            flakeRoot = self;
+          };
+        })
       ];
 
       # --- Deployments
@@ -133,7 +141,7 @@
         profiles."system" = {
           sshUser = "root";
           path = deploy-rs.lib.${system}.activate.nixos
-            self.nixosConfigurations.streams;
+            self.nixosConfigurations.ariadne;
           user = "root";
         };
       };
