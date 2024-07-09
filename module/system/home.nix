@@ -5,7 +5,6 @@
 { config, lib, pkgs, inputs, flakeRoot, ... }:
 let
   shellAliases = {
-    mpvf = "mpv --osd-msg1='\${estimated-frame-number} / \${estimated-frame-count}'";
     nr = "sudo nixos-rebuild switch --flake /persist/nixos#home";
     nrb = "sudo nixos-rebuild boot --flake /persist/nixos#home";
   };
@@ -108,6 +107,15 @@ in
     enable = true;
     shellAliases = shellAliases;
   };
+
+  # TODO: x server
+  #services.xserver.xkb = {
+  #  layout = "us,ru";
+  #  #variant = "workman,";
+  #  options = "grp:alt_shift_toggle";
+  #};
+  # TODO: console
+  console.keyMap = "us";
 
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.

@@ -11,7 +11,7 @@ userName: { pkgs, ... }: {
       (lowPrio openjdk17)
     ];
 
-    home.persistence."/persist/home/yukkop" = {
+    home.persistence."/persist/home/${userName}" = {
       directories = [
         ".local/share/PrismLauncher/"
       ];

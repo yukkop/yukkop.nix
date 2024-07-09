@@ -36,7 +36,7 @@
     home.persistence."/persist/home/${userName}" = {
       directories = [
         ".local/share/Steam"
-        #".steam"
+        ".steam"
       ];
       allowOther = true;
     };

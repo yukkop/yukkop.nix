@@ -3,12 +3,12 @@
 
   home-manager.users."${userName}" = {
     home.packages = with pkgs; [
-      discord
+      mpv
     ];
 
     home.persistence."/persist/home/${userName}" = {
       directories = [
-        ".config/discord"
+        ".config/mpv"
       ];
       allowOther = true;
     };

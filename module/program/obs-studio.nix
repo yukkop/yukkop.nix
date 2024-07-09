@@ -6,7 +6,7 @@ userName: { pkgs, ... }: {
       obs-studio
     ];
 
-    home.persistence."/persist/home/yukkop" = {
+    home.persistence."/persist/home/${userName}" = {
       directories = [
         ".config/obs-studio"
       ];
