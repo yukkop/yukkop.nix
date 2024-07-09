@@ -88,8 +88,15 @@
             flakeRoot = self;
           };
         })
-
         (mkNixosConfiguration nixpkgs-24-05 "tenix" {
+          config = { };
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs flakeRootPath;
+            flakeRoot = self;
+          };
+        })
+        (mkNixosConfiguration nixpkgs-24-05 "ariadne" {
           config = { };
           system = "x86_64-linux";
           specialArgs = {
@@ -112,6 +119,21 @@
           sshUser = "root";
           path = deploy-rs.lib.${system}.activate.nixos
             self.nixosConfigurations.tenix;
+          user = "root";
+        };
+      };
+
+      deploy.nodes.ariadne = let
+        inherit (self.nixosConfigurations.ariadne.config.nixpkgs) system;
+      in {
+        hostname = "ariadne";
+        fastConnection = true;
+        profilesOrder = [ "ariadne" ];
+        #sshOpts = [ ];
+        profiles."system" = {
+          sshUser = "root";
+          path = deploy-rs.lib.${system}.activate.nixos
+            self.nixosConfigurations.streams;
           user = "root";
         };
       };

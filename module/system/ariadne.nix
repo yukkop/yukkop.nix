@@ -13,8 +13,9 @@ in
   imports =
   [ 
     flakeRoot.nixosModules.platform.hetzner-amd2
+
     flakeRoot.nixosModules.program.tmux
-    #flakeRoot.nixosModules.program.nginx.nginx-rtmp
+    flakeRoot.nixosModules.program.nginx.nginx-rtmp
   ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -24,8 +25,7 @@ in
   zramSwap.enable = true;
   networking.domain = "";
   users.users.root.openssh.authorizedKeys.keys = [
-    ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCk/JHunqWTfBN2WJpXATwERJaOFXjyo6XuDCZ+AJ3y'' 
-    ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFa5x02qlKlW0IO0j/VVhlXWxKYcLutAx7fOtNwqVGLz yukkop@home'' 
+    ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAK+DoSzaE5ic5ccTppjJjsVrMQj7oLyW+4S8fB2dUgG yukkop@home'' 
   ];
 
   /* ssh */
@@ -40,64 +40,30 @@ in
     };
   };
 
+  users.defaultUserShell = pkgs.zsh;
   programs.bash.shellAliases = shellAliases;
   programs.zsh = {
     enable = true;
     shellAliases = shellAliases;
   };
 
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-
-  # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "Europe/Berlin";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
+  i18n.defaultLocale = "en_US.UTF-8";
   # console = {
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
   #   useXkbConfig = true; # use xkb.options in tty.
   # };
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-
-  
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
-
-  # Enable sound.
-  # hardware.pulseaudio.enable = true;
-  # OR
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  # };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.alice = {
-  #   isNormalUser = true;
-  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  #   packages = with pkgs; [
-  #     firefox
-  #     tree
-  #   ];
-  # };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -109,8 +75,6 @@ in
     man-db.enable = false;
     mandoc.enable = true;
   };
-
-  users.defaultUserShell = pkgs.zsh;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -154,5 +118,5 @@ in
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
 
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "24.05";
 }
