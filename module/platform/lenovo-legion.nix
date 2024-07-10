@@ -28,7 +28,6 @@
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   /* nvidia */
-  services.xserver.enable = true;
   services.xserver.videoDrivers = [ 
     "nvidia" 
     #"amdgpu" # probably useles with nvidia optimus prime

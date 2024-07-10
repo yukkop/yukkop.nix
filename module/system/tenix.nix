@@ -14,7 +14,6 @@ in
   [ 
     flakeRoot.nixosModules.platform.hetzner-amd2
     flakeRoot.nixosModules.program.tmux
-    #flakeRoot.nixosModules.program.nginx.nginx-rtmp
   ];
 
   users.defaultUserShell = pkgs.zsh;

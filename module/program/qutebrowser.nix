@@ -3,19 +3,23 @@ userName: { pkgs, lib, config, ... }: {
   /* module for home-manager */
 
   options = {
-    programs.qutebrowser.enable =
-      lib.mkEnableOption "enable qutebrowser";
-    programs.qutebrowser.persistence =
-      lib.mkEnableOption "enable persistence for qutebrowser data";
+    module.program.qutebrowser = {
+      enable =
+        lib.mkEnableOption "enable qutebrowser";
+      persistence =
+        lib.mkEnableOption "enable persistence for qutebrowser data";
+    };
   };
 
-  config = lib.mkIf config.programs.qutebrowser.enable {
+  config = lib.mkIf config.module.program.qutebrowser.enable {
     home-manager.users."${userName}" = {
       home.packages = with pkgs; [
         qutebrowser
       ];
 
-      home.persistence."/persist/home/yukkop" = lib.mkIf config.programs.qutebrowser.persistence {
+      home.persistence."/persist/home/yukkop" = 
+        lib.mkIf config.module.program.qutebrowser.persistence 
+      {
         directories = [
           ".config/qutebrowser"
           ".local/share/qutebrowser"
