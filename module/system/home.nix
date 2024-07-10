@@ -5,6 +5,8 @@
 { config, lib, pkgs, inputs, flakeRoot, ... }:
 let
   shellAliases = {
+    nr = "sudo nixos-rebuild switch --flake /persist/nixos#home";
+    nrb = "sudo nixos-rebuild boot --flake /persist/nixos#home";
   };
 in
 {

@@ -12,13 +12,13 @@
       # https://github.com/NixOS/nixpkgs/issues/137279
       extraPkgs = pkgs: with pkgs; [ pango harfbuzz libthai ];
 
-      # Workaround for an issue with VK_ICD_FILENAMES on nvidia hardware:
-      #
-      # - https://github.com/NixOS/nixpkgs/issues/126428 (bug)
-      # - https://github.com/NixOS/nixpkgs/issues/108598#issuecomment-858095726 (workaround)
-      extraProfile = ''
-        export VK_ICD_FILENAMES=${config.hardware.nvidia.package}/share/vulkan/icd.d/nvidia_icd.json:${config.hardware.nvidia.package.lib32}/share/vulkan/icd.d/nvidia_icd32.json:$VK_ICD_FILENAMES
-      '';
+      ## Workaround for an issue with VK_ICD_FILENAMES on nvidia hardware:
+      ##
+      ## - https://github.com/NixOS/nixpkgs/issues/126428 (bug)
+      ## - https://github.com/NixOS/nixpkgs/issues/108598#issuecomment-858095726 (workaround)
+      #extraProfile = ''
+      #  export VK_ICD_FILENAMES=${config.hardware.nvidia.package}/share/vulkan/icd.d/nvidia_icd.x86_64.json:$VK_ICD_FILENAMES
+      #'';
     });
   };
 
@@ -34,7 +34,7 @@
     home.persistence."/persist/home/${userName}" = {
       directories = [
         ".local/share/Steam"
-        ".steam"
+        #".steam"
       ];
       allowOther = true;
     };

@@ -15,7 +15,7 @@
 
   /* boot */
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "usbhid" "sd_mod" ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
+  boot.initrd.kernelModules = [ "dm-snapshot" "amdgpu" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
@@ -28,10 +28,11 @@
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   /* nvidia */
+  services.xserver.enable = true;
   services.xserver.videoDrivers = [ 
     "nvidia" 
-    #"nouveau" # open source nvidia
     #"amdgpu" # probably useles with nvidia optimus prime
+    #"nouveau" # open source nvidia
   ];
 
   hardware.opengl = {
@@ -42,6 +43,14 @@
       vulkan-loader
       vulkan-validation-layers
       vulkan-extension-layer
+      amdvlk
+
+    ];
+    extraPackages32 = with pkgs; [
+      pkgsi686Linux.vulkan-loader
+      pkgsi686Linux.vulkan-validation-layers
+      pkgsi686Linux.vulkan-extension-layer
+      driversi686Linux.amdvlk
     ];
   };
 
@@ -78,8 +87,15 @@
 
     # nvidia package overwrive
     package = config.boot.kernelPackages.nvidiaPackages.stable;
+
   };
 
+  #environment.sessionVariables = rec {
+  #  VK_ICD_FILENAMES = 
+  #    "${config.hardware.nvidia.package}/share/vulkan/icd.d/nvidia_icd.x86_64.json";
+
+  #    #:${config.environment.variables.VK_ICD_FILENAMES or ""}";
+  #};
 
   /* sound */
   hardware.pulseaudio.enable = true;

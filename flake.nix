@@ -81,7 +81,10 @@
         mkNixosConfiguration = self.lib.mkNixosConfiguration ./module;
       in builtins.listToAttrs [
         (mkNixosConfiguration nixpkgs-24-05 "home" {
-          config = { allowUnfree = true; };
+          config = { 
+	    allowUnfree = true;
+	    nvidia.acceptLicense = true;
+	  };
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs flakeRootPath;
