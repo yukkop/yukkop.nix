@@ -70,14 +70,14 @@ in
     package = nginxWithRtmp;
     recommendedGzipSettings = true;
     virtualHosts = {
-      "example.com" = {
+      "meet.bfs.band" = {
         listen = [ { addr = "0.0.0.0"; port = 80; } ];
         locations."/" = {
           root = "/var/www/html";
           index = "stream.html";
         };
       };
-      "hls.example.com" = {
+      "hls.meet.bfs.band" = {
         listen = [ { addr = "0.0.0.0"; port = 8080; } ];
         locations."/stat" = {
           extraConfig = ''
