@@ -105,10 +105,6 @@ in
   };
 
   programs.bash.shellAliases = shellAliases;
-  programs.zsh = {
-    enable = true;
-    shellAliases = shellAliases;
-  };
 
   # TODO: x server
   #services.xserver.xkb = {

@@ -17,7 +17,7 @@ userName: { pkgs, lib, config, ... }: {
         qutebrowser
       ];
 
-      home.persistence."/persist/home/yukkop" = 
+      home.persistence."/persist/home/${userName}" = 
         lib.mkIf config.module.program.qutebrowser.persistence 
       {
         directories = [

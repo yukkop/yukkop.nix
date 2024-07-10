@@ -28,6 +28,8 @@ in
       (flakeRoot.nixosModules.program.minecraft user)
       (flakeRoot.nixosModules.program.qutebrowser user)
       (flakeRoot.nixosModules.program.steam user)
+      (flakeRoot.nixosModules.program.zsh user shellAliases)
+      (flakeRoot.nixosModules.program.hyprland.home-manager user "grim -g \"''$(slurp)\" - | swappy -f")
     ];
 
     module.program = {
@@ -48,7 +50,12 @@ in
 
       obs-studio.enable = true;
       obs-studio.persistence = true;
+
+      zsh.enable = true;
+      zsh.persistence = true;
     };
+
+    module.home.windowManager.hyprland.enable = true;
   
     users.users."${user}" = {
      isNormalUser = true;
@@ -68,8 +75,7 @@ in
   	in [
             inputs.impermanence.nixosModules.home-manager.impermanence
             (flakeRoot.nixosModules.program.nixvim { homeManager = true; nixvim = inputs.nixvim; })
-            (flakeRoot.nixosModules.program.hyprland.home-manager { screenshotCommand = "grim -g \"''$(slurp)\" - | swappy -f"; })
-  	  screenshoter
+  	    screenshoter
           ];
   
           home.stateVersion = "24.05";
@@ -81,13 +87,12 @@ in
               "ms"
               "pc"
               "dc"
-  	    "mn"
+  	      "mc"
               "vd"
               ".ssh"
-  	    ".local/share/TelegramDesktop" # TODO: in telegram module
-  	    ".config/tmux" # TODO: in tmux module
-  	    "zsh/history"
-  	    ".tmux" # TODO: in tmux module
+  	      ".local/share/TelegramDesktop" # TODO: in telegram module
+  	      ".config/tmux" # TODO: in tmux module
+  	      ".tmux" # TODO: in tmux module
             ];
             files = [
   	    # FIXME simlynks issue
@@ -105,28 +110,6 @@ in
   	  bash = {
   	    shellAliases = shellAliases;
   	  };
-  	  zsh = {
-              enable = true;
-              enableCompletion = true;
-              autosuggestion.enable = true;
-              syntaxHighlighting.enable = true;
-            
-  	    shellAliases = shellAliases;
-              history = {
-                size = 10000;
-                path = "$HOME/zsh/history";
-              };
-              oh-my-zsh = {
-                enable = true;
-                #plugins = [ "git" "thefuck" ];
-                #theme = "fox";
-  	      #theme = "imajes";
-  	      theme = "terminalparty";
-  	      #theme = "itchy"
-  	      #theme = "kardan"
-  	      #theme = "nicoulaj"
-              };
-            };
   	};
   
           programs.git = {
