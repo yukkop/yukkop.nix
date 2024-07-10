@@ -69,9 +69,14 @@ in
 {
   imports =
   [ 
+    flakeRoot.nixosModules.user.yukkop
     flakeRoot.nixosModules.platform.hetzner-amd2
     flakeRoot.nixosModules.program.tmux
   ];
+
+  module.user.yukkop.enable = true;
+  module.user.yukkop.graphics = false;
+  module.user.yukkop.persistence = false;
 
   # Create necessary directories and files
   environment.etc."nginx/html/stream.html".text = streamHtml;
@@ -142,7 +147,8 @@ in
   };
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];  # Use Google DNS servers as an example
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;

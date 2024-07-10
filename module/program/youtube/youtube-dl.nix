@@ -1,9 +1,17 @@
- userName: { pkgs, ... }: {
+ userName: { pkgs, lib, config, ... }: {
   /* utility for download content from youtube */
+  options = {
+    module.program.youtube-dl = {
+      enable =
+        lib.mkEnableOption "enable youtube-dl";
+    };
+  };
 
-  home-manager.users."${userName}" = {
-    home.packages = with pkgs; [
-      youtube-dl
-    ];
+  config = lib.mkIf config.module.program.youtube-dl.enable {
+    home-manager.users."${userName}" = {
+      home.packages = with pkgs; [
+        youtube-dl
+      ];
+    };
   };
 }

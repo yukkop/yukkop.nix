@@ -18,6 +18,7 @@ in
     (flakeRoot.nixosModules.program.minecraft user)
     (flakeRoot.nixosModules.program.qutebrowser user)
     (flakeRoot.nixosModules.program.steam user)
+    (flakeRoot.nixosModules.program.telegram user)
     (flakeRoot.nixosModules.program.zsh user shellAliases)
     (flakeRoot.nixosModules.program.hyprland.home-manager user "grim -g \"''$(slurp)\" - | swappy -f")
   ];
@@ -33,29 +34,36 @@ in
     };
   };
 
+
   config = lib.mkIf config.module.user."${user}".enable {
 
     module.program = {
       steam.enable = lib.mkIf config.module.user."${user}".graphics true;
-      steam.persistence = true;
+      steam.persistence = lib.mkIf config.module.user."${user}".persistence true;
   
       qutebrowser.enable = lib.mkIf config.module.user."${user}".graphics true;
-      qutebrowser.persistence = true;
+      qutebrowser.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
       mpv.enable = lib.mkIf config.module.user."${user}".graphics true;
-      mpv.persistence = true;
+      mpv.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
       discord.enable = lib.mkIf config.module.user."${user}".graphics true;
-      discord.persistence = true;
+      discord.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
       minecraft.enable = lib.mkIf config.module.user."${user}".graphics true;
-      minecraft.persistence = true;
+      minecraft.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
       obs-studio.enable = lib.mkIf config.module.user."${user}".graphics true;
-      obs-studio.persistence = true;
+      obs-studio.persistence = lib.mkIf config.module.user."${user}".persistence true;
+
+      telegram.enable = lib.mkIf config.module.user."${user}".graphics true;
+      telegram.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
       zsh.enable = true;
-      zsh.persistence = true;
+      zsh.persistence = lib.mkIf config.module.user."${user}".persistence true;
+
+      tmux.enable = true;
+      youtube-dl.enable = true;
     };
 
     module.home.windowManager.hyprland.enable = lib.mkIf config.module.user."${user}".graphics true;
@@ -74,11 +82,11 @@ in
       users = {
         "${user}" = {
           imports = let 
-  	  screenshoter = import ../program/screenshot/wayland-way.nix;
-  	in [
-            inputs.impermanence.nixosModules.home-manager.impermanence
-            (flakeRoot.nixosModules.program.nixvim { homeManager = true; nixvim = inputs.nixvim; })
-  	    screenshoter
+  	    screenshoter = import ../program/screenshot/wayland-way.nix;
+  	  in [
+              inputs.impermanence.nixosModules.home-manager.impermanence
+              (flakeRoot.nixosModules.program.nixvim { homeManager = true; nixvim = inputs.nixvim; })
+  	      screenshoter
           ];
   
           home.stateVersion = "24.05";
@@ -93,27 +101,25 @@ in
   	      "mc"
               "vd"
               ".ssh"
-  	      ".local/share/TelegramDesktop" # TODO: in telegram module
   	      ".config/tmux" # TODO: in tmux module
   	      ".tmux" # TODO: in tmux module
             ];
             files = [
-  	    # FIXME simlynks issue
+  	      # FIXME simlynks issue
               "dw" # link to Downloads
             ];
             allowOther = true; # allows other users, such as root, to access files
           };
   
-  	home.packages = with pkgs; [
-  	  telegram-desktop
-  	  htop
-  	];
+  	  home.packages = with pkgs; [
+  	    htop
+  	  ];
   
-  	programs = {
-  	  bash = {
-  	    shellAliases = shellAliases;
+  	  programs = {
+  	    bash = {
+  	      shellAliases = shellAliases;
+  	    };
   	  };
-  	};
   
           programs.git = {
             enable = true;
