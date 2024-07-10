@@ -12,6 +12,7 @@ in
 {
   imports =
   [ 
+    flakeRoot.nixosModules.user.yukkop
     # Include the results of the hardware scan.
     flakeRoot.nixosModules.platform.lenovo-legion
     flakeRoot.nixosModules.program.tmux
@@ -20,11 +21,13 @@ in
     (flakeRoot.nixosModules.disko.lenovo-legion { device = "/dev/nvme0n1"; })
 
     inputs.impermanence.nixosModules.impermanence
-    flakeRoot.nixosModules.user.yukkop
     (flakeRoot.nixosModules.program.nixvim { nixvim = inputs.nixvim; })
 
     flakeRoot.nixosModules.program.hyprland.default
   ];
+
+  module.user.yukkop.enable = true;
+  module.user.yukkop.graphics = true;
 
   users.defaultUserShell = pkgs.zsh;
 

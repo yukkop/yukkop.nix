@@ -1,4 +1,4 @@
-{ persist ? false, pkgs, inputs, flakeRoot ? null, flakeRootPath, lib, config, ... }:
+{ pkgs, inputs, flakeRoot ? null, lib, config, ... }:
 let 
   user = "yukkop";
   shellAliases = {
@@ -9,53 +9,56 @@ let
   };
 in
 {
-  #options = {
-  #  user.yukkop = {
-  #    enable =
-  #      lib.mkEnableOption "enable yukkop";
-  #    graphics =
-  #      lib.mkEnableOption "enable graphics for user";
-  #  };
-  #};
+  imports = [
+    inputs.home-manager.nixosModules.default
+    (flakeRoot.nixosModules.program.youtube.youtube-dl user)
+    (flakeRoot.nixosModules.program.discord user)
+    (flakeRoot.nixosModules.program.mpv user)
+    (flakeRoot.nixosModules.program.obs-studio user)
+    (flakeRoot.nixosModules.program.minecraft user)
+    (flakeRoot.nixosModules.program.qutebrowser user)
+    (flakeRoot.nixosModules.program.steam user)
+    (flakeRoot.nixosModules.program.zsh user shellAliases)
+    (flakeRoot.nixosModules.program.hyprland.home-manager user "grim -g \"''$(slurp)\" - | swappy -f")
+  ];
 
-  #config = lib.mkIf config.user.yukkop.enable {
-    imports = [
-      inputs.home-manager.nixosModules.default
-      (flakeRoot.nixosModules.program.youtube.youtube-dl user)
-      (flakeRoot.nixosModules.program.discord user)
-      (flakeRoot.nixosModules.program.mpv user)
-      (flakeRoot.nixosModules.program.obs-studio user)
-      (flakeRoot.nixosModules.program.minecraft user)
-      (flakeRoot.nixosModules.program.qutebrowser user)
-      (flakeRoot.nixosModules.program.steam user)
-      (flakeRoot.nixosModules.program.zsh user shellAliases)
-      (flakeRoot.nixosModules.program.hyprland.home-manager user "grim -g \"''$(slurp)\" - | swappy -f")
-    ];
+  options = {
+    module.user."${user}" = {
+      enable =
+        lib.mkEnableOption "enable ${user}";
+      graphics =
+        lib.mkEnableOption "enable graphics for ${user}";
+      persistence =
+        lib.mkEnableOption "enable persistence for ${user}";
+    };
+  };
+
+  config = lib.mkIf config.module.user."${user}".enable {
 
     module.program = {
-      steam.enable = true;
+      steam.enable = lib.mkIf config.module.user."${user}".graphics true;
       steam.persistence = true;
   
-      qutebrowser.enable = true;
+      qutebrowser.enable = lib.mkIf config.module.user."${user}".graphics true;
       qutebrowser.persistence = true;
 
-      mpv.enable = true;
+      mpv.enable = lib.mkIf config.module.user."${user}".graphics true;
       mpv.persistence = true;
 
-      discord.enable = true;
+      discord.enable = lib.mkIf config.module.user."${user}".graphics true;
       discord.persistence = true;
 
-      minecraft.enable = true;
+      minecraft.enable = lib.mkIf config.module.user."${user}".graphics true;
       minecraft.persistence = true;
 
-      obs-studio.enable = true;
+      obs-studio.enable = lib.mkIf config.module.user."${user}".graphics true;
       obs-studio.persistence = true;
 
       zsh.enable = true;
       zsh.persistence = true;
     };
 
-    module.home.windowManager.hyprland.enable = true;
+    module.home.windowManager.hyprland.enable = lib.mkIf config.module.user."${user}".graphics true;
   
     users.users."${user}" = {
      isNormalUser = true;
@@ -64,7 +67,7 @@ in
     };
   
     systemd.tmpfiles.rules = [
-      "d /persist/home/yukkop 1777 yukkop users - -"
+      "d /persist/home/${user} 1777 ${user} users - -"
     ];
   
     home-manager = {
@@ -80,7 +83,7 @@ in
   
           home.stateVersion = "24.05";
   
-          home.persistence."/persist/home/yukkop" = {
+          home.persistence."/persist/home/${user}" = lib.mkIf config.module.user."${user}".persistence {
             directories = [
               "Downloads"
               "pj"
@@ -126,5 +129,5 @@ in
         };
       };
     };
-  #};
+  };
 }
