@@ -28,6 +28,7 @@ in
 
   module.user.yukkop.enable = true;
   module.user.yukkop.graphics = true;
+  module.user.yukkop.persistence = true;
 
   users.defaultUserShell = pkgs.zsh;
 
