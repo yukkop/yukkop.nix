@@ -30,36 +30,6 @@ let
     </body>
     </html>
   '';
-
-  # Sample stylesheet for RTMP stats (stat.xsl)
-  statXsl = ''
-    <?xml version="1.0"?>
-    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:output method="html"/>
-    <xsl:template match="/">
-        <html>
-        <head>
-            <title>RTMP Streams</title>
-        </head>
-        <body>
-            <h1>RTMP Streams</h1>
-            <table border="1">
-                <tr>
-                    <th>Name</th>
-                    <th>Address</th>
-                </tr>
-                <xsl:for-each select="rtmp/server/application">
-                    <tr>
-                        <td><xsl:value-of select="name"/></td>
-                        <td><xsl:value-of select="live/streams/stream/name"/></td>
-                    </tr>
-                </xsl:for-each>
-            </table>
-        </body>
-        </html>
-    </xsl:template>
-    </xsl:stylesheet>
-  '';
 in
 {
   options = {
@@ -69,7 +39,10 @@ in
   config = lib.mkIf config.module.server.nginx-rtmp.enable {
     # Create necessary directories and files
     environment.etc."nginx/html/stream.html".text = streamHtml;
-    environment.etc."nginx/xsl/stat.xsl".text = statXsl;
+    environment.etc."nginx/xsl/stat.xsl".source = pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/arut/nginx-rtmp-module/master/stat.xsl"; 
+      sha256 = "sha256-lBJrKrjbhj4RB1m7XkRDGiFI+1L/+eIsO0tYtMb9q7I=";
+    };
 
     fileSystems."/tmp/hls" = {
       device = "tmpfs";
@@ -84,62 +57,64 @@ in
     # networking.firewall.enable = false;
 
     # email address used with Let's Encrypt
-    security.acme.certs = {
-      "${streamHost}".email = "${letsEncryptEmail}";
-    };
+    #security.acme.certs = {
+    #  "${streamHost}".email = "${letsEncryptEmail}";
+    #};
 
-    security.acme.acceptTerms = true;
+    #security.acme.acceptTerms = true;
     services.nginx = {
       enable = true;
-      locations."/" = {
-        return = "200 '<html><body>It works</body></html>'";
-        extraConfig = ''
-          default_type text/html;
-        '';
-      };
-      ackage = nginxWithRtmp;
+      appendConfig = ''
+        #rtmp {
+        #  server {
+        #    listen 1935; # Standard RTMP port
+        #    chunk_size 4096;
+        #    application drawing {
+        #      live on;
+        #      hls on;
+        #      hls_path /tmp/hls;
+        #      hls_nested on;
+        #      hls_fragment 1;
+        #      hls_playlist_length 5;
+        #    }
+        #  }
+        #};
+      '';
+      #commonHttpConfig = '' '';
+      package = nginxWithRtmp;
       recommendedGzipSettings = true;
       virtualHosts = {
         "${streamHost}" = {
-          enableACME = true;
-          forceSSL = true;
-          listen = [ { addr = "0.0.0.0"; port = 443; } ];
-          basicAuth = { yukkop = "я свой, пути"; snuff = "какой ещё пароль, блять"; };
-          locations."/" = {
+          listen = [ { addr = "0.0.0.0"; port = 80; } ];
+          locations."/watch" = {
+            root = "/etc/nginx/html";
             index = "stream.html";
-            root = "/var/www/html";
+          };
+	  # This URL provides RTMP statistics in XML
+          locations."/stat" = {
+            extraConfig = ''
+              rtmp_stat all;
+              rtmp_stat_stylesheet stat.xsl;
+            '';
+          };
+          locations."=/stat.xsl" = {
+	    # XML stylesheet to view RTMP stats.
+            # Copy stat.xsl wherever you want
+            # and put the full directory path here
+            alias = "/etc/nginx/xsl/stat.xsl";
+          };
+          locations."/hls" = {
+            root = "/tmp";
+            extraConfig = ''
+              types {
+                application/vnd.apple.mpegurl m3u8;
+                video/mp2t ts;
+              }
+              add_header Cache-Control no-cache;
+              add_header Access-Control-Allow-Origin *;
+            '';
           };
         };
-        #"stream.bfs.band" = {
-        #  listen = [ { addr = "0.0.0.0"; port = 80; } ];
-        #  locations."/" = {
-        #    root = "/var/www/html";
-        #    index = "stream.html";
-        #  };
-        #};
-        #"watch.stream.bfs.band" = {
-        #  listen = [ { addr = "0.0.0.0"; port = 8080; } ];
-        #  locations."/stat" = {
-        #    extraConfig = ''
-        #      rtmp_stat all;
-        #      rtmp_stat_stylesheet stat.xsl;
-        #    '';
-        #  };
-        #  locations."=/stat.xsl" = {
-        #    alias = "/var/www/xsl/stat.xsl";
-        #  };
-        #  locations."/hls" = {
-        #    root = "/tmp";
-        #    extraConfig = ''
-        #      types {
-        #        application/vnd.apple.mpegurl m3u8;
-        #        video/mp2t ts;
-        #      }
-        #      add_header Cache-Control no-cache;
-        #      add_header Access-Control-Allow-Origin *;
-        #    '';
-        #  };
-        #};
       };
     };
 
