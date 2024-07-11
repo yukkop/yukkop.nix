@@ -17,7 +17,7 @@ in
     (flakeRoot.nixosModules.disko.lenovo-legion { device = "/dev/nvme0n1"; })
 
     inputs.impermanence.nixosModules.impermanence
-    (flakeRoot.nixosModules.program.nixvim { nixvim = inputs.nixvim; })
+    flakeRoot.nixosModules.program.nixvim.nixos
 
     flakeRoot.nixosModules.program.hyprland.default
   ];
@@ -25,6 +25,9 @@ in
   module.user.yukkop.enable = true;
   module.user.yukkop.graphics = true;
   module.user.yukkop.persistence = true;
+
+  module.program.nixvim.enable = true;
+  module.program.nixvim.persistence = true;
 
   users.defaultUserShell = pkgs.zsh;
 

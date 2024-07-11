@@ -19,6 +19,7 @@ in
     (flakeRoot.nixosModules.program.qutebrowser user)
     (flakeRoot.nixosModules.program.steam user)
     (flakeRoot.nixosModules.program.telegram user)
+    (flakeRoot.nixosModules.program.nixvim.home-manager user)
     (flakeRoot.nixosModules.program.zsh user shellAliases)
     (flakeRoot.nixosModules.program.hyprland.home-manager user "grim -g \"''$(slurp)\" - | swappy -f")
   ];
@@ -37,6 +38,10 @@ in
 
   config = lib.mkIf config.module.user."${user}".enable {
 
+    module.home.user."${user}".program = {
+      nixvim.enable = true;
+      nixvim.persistence = lib.mkIf config.module.user."${user}".persistence true;
+    };
     module.program = {
       steam.enable = lib.mkIf config.module.user."${user}".graphics true;
       steam.persistence = lib.mkIf config.module.user."${user}".persistence true;
@@ -85,10 +90,9 @@ in
   	    screenshoter = import ../program/screenshot/wayland-way.nix;
   	  in [
               inputs.impermanence.nixosModules.home-manager.impermanence
-              (flakeRoot.nixosModules.program.nixvim { homeManager = true; nixvim = inputs.nixvim; })
   	      screenshoter
           ];
-  
+
           home.stateVersion = "24.05";
   
           home.persistence."/persist/home/${user}" = lib.mkIf config.module.user."${user}".persistence {
