@@ -18,6 +18,7 @@ in
 
     inputs.impermanence.nixosModules.impermanence
     flakeRoot.nixosModules.program.nixvim.nixos
+    (flakeRoot.nixosModules.program.zsh.nixos { shellAliases = shellAliases; })
 
     flakeRoot.nixosModules.program.hyprland.default
   ];
@@ -26,8 +27,16 @@ in
   module.user.yukkop.graphics = true;
   module.user.yukkop.persistence = true;
 
-  module.program.nixvim.enable = true;
-  module.program.nixvim.persistence = true;
+  module.program = {
+    nixvim = {
+      enable = true;
+      persistence = true;
+    };
+    zsh = {
+      enable = true;
+      persistence = true;
+    };
+  };
 
   users.defaultUserShell = pkgs.zsh;
 

@@ -1,10 +1,5 @@
 userName: { lib, config, inputs, flakeRoot, ...}:
 {
-  imports = [
-    #inputs.nixvim.homeManagerModules.nixvim 
-    #flakeRoot.nixosModules.program.nixvim.default
-  ];
-
   options = {
     module.home.user."${userName}".program.nixvim = {
       enable =
@@ -26,7 +21,7 @@ userName: { lib, config, inputs, flakeRoot, ...}:
 
       # impermamence
       home.persistence."/persist/home/${userName}" = 
-       lib.mkIf config.module.program.nixvim.persistence
+       lib.mkIf config.module.home.user."${userName}".program.nixvim.persistence
       {
         directories = [
           "$XDG_DATA_HOME/nvim/treesitter"

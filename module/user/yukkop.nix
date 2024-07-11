@@ -20,7 +20,7 @@ in
     (flakeRoot.nixosModules.program.steam user)
     (flakeRoot.nixosModules.program.telegram user)
     (flakeRoot.nixosModules.program.nixvim.home-manager user)
-    (flakeRoot.nixosModules.program.zsh user shellAliases)
+    (flakeRoot.nixosModules.program.zsh.home-manager user { shellAliases = shellAliases; })
     (flakeRoot.nixosModules.program.hyprland.home-manager user "grim -g \"''$(slurp)\" - | swappy -f")
   ];
 
@@ -41,6 +41,9 @@ in
     module.home.user."${user}".program = {
       nixvim.enable = true;
       nixvim.persistence = lib.mkIf config.module.user."${user}".persistence true;
+
+      zsh.enable = true;
+      zsh.persistence = lib.mkIf config.module.user."${user}".persistence true;
     };
     module.program = {
       steam.enable = lib.mkIf config.module.user."${user}".graphics true;
@@ -63,9 +66,6 @@ in
 
       telegram.enable = lib.mkIf config.module.user."${user}".graphics true;
       telegram.persistence = lib.mkIf config.module.user."${user}".persistence true;
-
-      zsh.enable = true;
-      zsh.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
       tmux.enable = true;
       youtube-dl.enable = true;

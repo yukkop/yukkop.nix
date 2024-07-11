@@ -72,11 +72,24 @@ in
     flakeRoot.nixosModules.user.yukkop
     flakeRoot.nixosModules.platform.hetzner-amd2
     flakeRoot.nixosModules.program.tmux
+    (flakeRoot.nixosModules.program.zsh.nixos { shellAliases = shellAliases; })
+    #flakeRoot.nixosModules.program.nixvim.nixos
   ];
 
   module.user.yukkop.enable = true;
   module.user.yukkop.graphics = false;
   module.user.yukkop.persistence = false;
+
+  module.program = {
+    #nixvim = {
+    #  #enable = true;
+    #  #persistence = false;
+    #};
+    zsh = {
+      enable = true;
+      persistence = false;
+    };
+  };
 
   # Create necessary directories and files
   environment.etc."nginx/html/stream.html".text = streamHtml;
