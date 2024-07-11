@@ -1,7 +1,8 @@
 { lib, config, inputs, flakeRoot, ...}:
 {
+  #  neccessary imports
+  #  inputs.impermanence.nixosModules.impermanence
   imports = [
-    inputs.impermanence.nixosModules.impermanence
     inputs.nixvim.nixosModules.nixvim
     flakeRoot.nixosModules.program.nixvim.default
   ];

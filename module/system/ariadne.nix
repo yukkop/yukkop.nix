@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 { pkgs, flakeRoot, lib, ... }:
 let
   # Define a custom Nginx with RTMP module
@@ -71,9 +67,7 @@ in
   [ 
     flakeRoot.nixosModules.user.yukkop
     flakeRoot.nixosModules.platform.hetzner-amd2
-    flakeRoot.nixosModules.program.tmux
-    (flakeRoot.nixosModules.program.zsh.nixos { shellAliases = shellAliases; })
-    #flakeRoot.nixosModules.program.nixvim.nixos
+    (flakeRoot.nixosModules.program.default { shellAliases = shellAliases; })
   ];
 
   module.user.yukkop.enable = true;

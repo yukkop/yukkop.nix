@@ -1,8 +1,7 @@
 { shellAliases ? {} }: { config, lib, flakeRoot, inputs, ... }: {
-  imports = [
-    inputs.impermanence.nixosModules.impermanence
-  ];
-
+  #  neccessary imports
+  #  inputs.impermanence.nixosModules.impermanence
+ 
   options = {
     module.program.zsh = {
       enable =

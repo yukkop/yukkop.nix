@@ -8,24 +8,25 @@ in
 {
   imports =
   [ 
-    flakeRoot.nixosModules.user.yukkop
+    (flakeRoot.nixosModules.program.default { shellAliases = shellAliases; })
     # Include the results of the hardware scan.
     flakeRoot.nixosModules.platform.lenovo-legion
-    flakeRoot.nixosModules.program.tmux
+
+    flakeRoot.nixosModules.user.yukkop
 
     inputs.disko.nixosModules.default
     (flakeRoot.nixosModules.disko.lenovo-legion { device = "/dev/nvme0n1"; })
-
-    inputs.impermanence.nixosModules.impermanence
-    flakeRoot.nixosModules.program.nixvim.nixos
-    (flakeRoot.nixosModules.program.zsh.nixos { shellAliases = shellAliases; })
-
-    flakeRoot.nixosModules.program.hyprland.default
   ];
 
-  module.user.yukkop.enable = true;
-  module.user.yukkop.graphics = true;
-  module.user.yukkop.persistence = true;
+  module.user.yukkop = {
+    enable = true;
+    graphics = true;
+    persistence = true;
+  };
+
+  module.windowManager.hyprland = {
+    enable = true;
+  };
 
   module.program = {
     nixvim = {
