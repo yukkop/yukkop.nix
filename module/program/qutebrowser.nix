@@ -8,20 +8,27 @@ userName: { pkgs, lib, config, ... }: {
         lib.mkEnableOption "enable qutebrowser";
       persistence =
         lib.mkEnableOption "enable persistence for qutebrowser data";
+      wayland =
+        lib.mkEnableOption "preferences neccessary if you use wayland";
     };
   };
 
   config = lib.mkIf config.module.program.qutebrowser.enable {
     home-manager.users."${userName}" = {
-      home.packages = with pkgs; [
-        qutebrowser
-      ];
+      programs.qutebrowser = {
+        enable = true;
+	settings = {
+	  webengine = {
+            qt.qpa.platform = lib.mkIf config.module.program.qutebrowser.wayland "wayland";
+	  };
+	};
+      };
 
       home.persistence."/persist/home/${userName}" = 
         lib.mkIf config.module.program.qutebrowser.persistence 
       {
         directories = [
-          ".config/qutebrowser"
+          #".config/qutebrowser"
           ".local/share/qutebrowser"
         ];
         allowOther = true; 

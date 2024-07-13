@@ -9,6 +9,10 @@
   };
 
   config = lib.mkIf config.module.program.telegram.enable {
+    module.program.shellAliases = {
+      telegram = "telegram-desktop";
+    };
+
     home-manager.users."${userName}" = {
       home.packages = with pkgs; [
   	telegram-desktop

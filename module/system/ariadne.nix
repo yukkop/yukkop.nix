@@ -1,14 +1,11 @@
 { pkgs, flakeRoot, lib, ... }:
-let 
-  shellAliases = {};
-in
 {
   imports =
   [ 
     flakeRoot.nixosModules.user.yukkop
     (flakeRoot.nixosModules.server.nginx-rtmp { streamHost = "stream.bfs.band"; letsEncryptEmail = "hectic.yukkop@gmail.com"; })
     flakeRoot.nixosModules.platform.hetzner-amd2
-    (flakeRoot.nixosModules.program.default { shellAliases = shellAliases; })
+    flakeRoot.nixosModules.program.default
   ];
 
   module.user.yukkop.enable = true;
@@ -18,6 +15,9 @@ in
   module.server.nginx-rtmp.enable = true;
 
   module.program = {
+    docker = {
+      enable = true;
+    };
     nixvim = {
       enable = true;
       persistence = false;

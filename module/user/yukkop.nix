@@ -5,7 +5,6 @@ let
     dev = "nix develop -c zsh";
     hlog = "cat $XDG_RUNTIME_DIR/hypr/$(ls -t $XDG_RUNTIME_DIR/hypr/ | head -n 2 | tail -n 1)/hyprland.log";
     ttyhlog = "cat $XDG_RUNTIME_DIR/hypr/$(ls -t $XDG_RUNTIME_DIR/hypr/ | head -n 1)/hyprland.log";
-    mpvf = "mpv --osd-msg1='\${estimated-frame-number} / \${estimated-frame-count}'";
   };
 in
 {

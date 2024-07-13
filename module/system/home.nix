@@ -1,14 +1,8 @@
 { config, lib, pkgs, inputs, flakeRoot, ... }:
-let
-  shellAliases = {
-    nr = "sudo nixos-rebuild switch --flake /persist/nixos#home";
-    nrb = "sudo nixos-rebuild boot --flake /persist/nixos#home";
-  };
-in
 {
   imports =
   [ 
-    (flakeRoot.nixosModules.program.default { shellAliases = shellAliases; })
+    flakeRoot.nixosModules.program.default
     # Include the results of the hardware scan.
     flakeRoot.nixosModules.platform.lenovo-legion
 
@@ -22,6 +16,11 @@ in
     enable = true;
     graphics = true;
     persistence = true;
+  };
+
+  _module.args.shellAliases = {
+    nr = "sudo nixos-rebuild switch --flake /persist/nixos#home";
+    nrb = "sudo nixos-rebuild boot --flake /persist/nixos#home";
   };
 
   module.windowManager.hyprland = {
@@ -117,7 +116,7 @@ in
     };
   };
 
-  programs.bash.shellAliases = shellAliases;
+  programs.bash.shellAliases = config._module.args.shellAliases;
 
   # TODO: x server
   #services.xserver.xkb = {

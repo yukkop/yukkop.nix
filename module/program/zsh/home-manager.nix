@@ -24,8 +24,8 @@
           home.persistence."/persist/home/${userName}" = 
             lib.mkIf config.module.home.user."${userName}".program.zsh.persistence 
           {
-            files = [
-              "zsh-history"
+            directories = [
+              ".zsh"
             ];
             allowOther = true;
           };

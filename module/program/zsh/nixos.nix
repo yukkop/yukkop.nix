@@ -22,8 +22,8 @@
      lib.mkIf config.module.program.zsh.persistence
    {
      hideMounts = true;
-     files = [
-       "/root/zsh-history"
+     directories = [
+       "/root/.zsh"
      ];
    };
 

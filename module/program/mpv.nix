@@ -9,6 +9,10 @@
   };
 
   config = lib.mkIf config.module.program.mpv.enable {
+    module.program.shellAliases = {
+      mpvf = "mpv --osd-msg1='\${estimated-frame-number} / \${estimated-frame-count}'";
+    };
+
     home-manager.users."${userName}" = {
       home.packages = with pkgs; [
         mpv

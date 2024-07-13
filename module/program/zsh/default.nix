@@ -12,7 +12,7 @@ shellAliases: { config, lib, ... }: {
             shellAliases = shellAliases;
             history = {
               size = 10000;
-              path = "$HOME/zsh-history";
+              path = "$HOME/.zsh/.zsh_history";
             };
             oh-my-zsh = {
               enable = true;
