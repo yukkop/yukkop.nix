@@ -6,6 +6,7 @@
     (flakeRoot.nixosModules.server.nginx-rtmp { streamHost = "stream.bfs.band"; letsEncryptEmail = "hectic.yukkop@gmail.com"; })
     flakeRoot.nixosModules.platform.hetzner-amd2
     flakeRoot.nixosModules.program.default
+    flakeRoot.nixosModules.preset.default
   ];
 
   module.user.yukkop.enable = true;
@@ -29,8 +30,6 @@
   };
 
   users.defaultUserShell = pkgs.zsh;
-
-  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Use the systemd-boot EFI boot loader.
   boot.tmp.cleanOnBoot = true;

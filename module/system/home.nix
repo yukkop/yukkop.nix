@@ -10,6 +10,7 @@
 
     inputs.disko.nixosModules.default
     (flakeRoot.nixosModules.disko.lenovo-legion { device = "/dev/nvme0n1"; })
+    flakeRoot.nixosModules.preset.default
   ];
 
   module.user.yukkop = {
@@ -18,7 +19,7 @@
     persistence = true;
   };
 
-  _module.args.shellAliases = {
+  module.program.shellAliases = {
     nr = "sudo nixos-rebuild switch --flake /persist/nixos#home";
     nrb = "sudo nixos-rebuild boot --flake /persist/nixos#home";
   };
@@ -39,8 +40,6 @@
   };
 
   users.defaultUserShell = pkgs.zsh;
-
-  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -116,7 +115,7 @@
     };
   };
 
-  programs.bash.shellAliases = config._module.args.shellAliases;
+  programs.bash.shellAliases = config.module.program.shellAliases;
 
   # TODO: x server
   #services.xserver.xkb = {
@@ -124,7 +123,7 @@
   #  #variant = "workman,";
   #  options = "grp:alt_shift_toggle";
   #};
-  # TODO: console
+  # TODO: terminal
   console.keyMap = "us";
 
   # Pick only one of the below networking options.
