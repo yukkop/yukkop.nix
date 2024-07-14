@@ -7,6 +7,8 @@ userName: screenshotCommand: { lib, config, ... }: {
     };
   };
 
+  program.eww.enable = true;
+
   config = lib.mkIf config.module.home.windowManager.hyprland.enable {
     home-manager = {
       users = {
@@ -19,9 +21,13 @@ userName: screenshotCommand: { lib, config, ... }: {
                 shadow_offset = "0 5";
               };
       
-              "$mod" = "SUPER";
+              "$mod" = "SUPER_R";
+              "$mod2" = "SUPER_L CONTROL_R";
               "$terminal" = "kitty";
               "$browser" = "qutebrowser";
+              "$obs" = "obs";
+              "$messenger" = "telegram-desktop";
+              "$calling-app" = "discord";
               "$screenshot" = "${screenshotCommand}";
               "$menu" = "rofi -show drun -show-icons";
       
@@ -29,7 +35,6 @@ userName: screenshotCommand: { lib, config, ... }: {
               "$monitor2" = "HDMI-A-1";
       
               monitor = [ 
-                #",preferred,auto,auto"
                 "$monitor1, 1920x1080@120, 0x0, 1"
                 "$monitor2, 1920x1080, -1920x0, 1"
               ];
@@ -40,12 +45,12 @@ userName: screenshotCommand: { lib, config, ... }: {
               ];
       
               misc = {
-      
+
               };
       
               input = {
                 kb_layout = "us,ru";
-                kb_options = "grp:alt_shift_toggle";
+                kb_options = "grp:alt_shift_toggle,compose:ralt";
                 follow_mouse = 1;
               };
       
@@ -64,9 +69,11 @@ userName: screenshotCommand: { lib, config, ... }: {
       
               };
       
-              animations = {
-      
-              };
+              animation = [
+                "fade,0"
+                "workspaces,0"
+                "windows,0"
+              ];
       
               dwindle = {
                 pseudotile = true;
@@ -95,17 +102,28 @@ userName: screenshotCommand: { lib, config, ... }: {
               "$ws8" = "record";
               "$ws9" = "lauch";
               "$ws10" = "rare";
+	      # mirrored workspaces in case if i need more
+              "$ws1m" = "m-term";
+              "$ws2m" = "m-web";
+              "$ws3m" = "m-mess";
+              "$ws4m" = "m-tool";
+              "$ws5m" = "m-call";
+              "$ws6m" = "m-misc";
+              "$ws7m" = "m-game";
+              "$ws8m" = "m-record";
+              "$ws9m" = "m-lauch";
+              "$ws10m" = "m-rare";
       
               workspace = [
                 "name:$ws1, on-create-empty:$terminal, monitor:$monitor1, default:true"
                 "name:$ws2, on-create-empty:$browser, monitor:$monitor2, default:true"
-                #"name:$ws3, "
+                "name:$ws3, on-create-empty:$messenger, monitor:$monitor1"
                 #"name:$ws4, "
-                #"name:$ws5, "
+                "name:$ws5, on-create-empty:$calling-app, monitor:$monitor2"
                 #"name:$ws6, "
-                #"name:$ws7, "
-                #"name:$ws8, "
-                #"name:$ws9, "
+                "name:$ws7, monitor:$monitor1"
+                "name:$ws8, on-create-empty:$obs, monitor:$monitor2"
+                "name:$ws9, monitor:$monitor1"
               ];
       
       
@@ -116,6 +134,7 @@ userName: screenshotCommand: { lib, config, ... }: {
                 "$mod, SPACE, togglefloating"
                 "$mod CONTROL_L, B, exec, $menu"
                 "$mod, F, fullscreen"
+                "$mod SHIFT, R, exec, hyprctl reload"
                 ", code:107, exec, $screenshot"
       
                 # move focus
@@ -134,6 +153,15 @@ userName: screenshotCommand: { lib, config, ... }: {
                 "$mod, 7, workspace, name:$ws7"
                 "$mod, 8, workspace, name:$ws8"
                 "$mod, 9, workspace, name:$ws9"
+                "$mod2, 1, workspace, name:$ws1m"
+                "$mod2, 2, workspace, name:$ws2m"
+                "$mod2, 3, workspace, name:$ws3m"
+                "$mod2, 4, workspace, name:$ws4m"
+                "$mod2, 5, workspace, name:$ws5m"
+                "$mod2, 6, workspace, name:$ws6m"
+                "$mod2, 7, workspace, name:$ws7m"
+                "$mod2, 8, workspace, name:$ws8m"
+                "$mod2, 9, workspace, name:$ws9m"
       
                 # Move active window to a workspace
                 "$mod SHIFT, 1, movetoworkspace, name:$ws1"
@@ -145,6 +173,15 @@ userName: screenshotCommand: { lib, config, ... }: {
                 "$mod SHIFT, 7, movetoworkspace, name:$ws7"
                 "$mod SHIFT, 8, movetoworkspace, name:$ws8"
                 "$mod SHIFT, 9, movetoworkspace, name:$ws9"
+                "$mod2 SHIFT, 1, movetoworkspace, name:$ws1m"
+                "$mod2 SHIFT, 2, movetoworkspace, name:$ws2m"
+                "$mod2 SHIFT, 3, movetoworkspace, name:$ws3m"
+                "$mod2 SHIFT, 4, movetoworkspace, name:$ws4m"
+                "$mod2 SHIFT, 5, movetoworkspace, name:$ws5m"
+                "$mod2 SHIFT, 6, movetoworkspace, name:$ws6m"
+                "$mod2 SHIFT, 7, movetoworkspace, name:$ws7m"
+                "$mod2 SHIFT, 8, movetoworkspace, name:$ws8m"
+                "$mod2 SHIFT, 9, movetoworkspace, name:$ws9m"
               ];
             };
           };
