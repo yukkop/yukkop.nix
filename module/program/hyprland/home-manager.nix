@@ -7,12 +7,13 @@ userName: screenshotCommand: { lib, config, ... }: {
     };
   };
 
-  program.eww.enable = true;
-
   config = lib.mkIf config.module.home.windowManager.hyprland.enable {
-    home-manager = {
-      users = {
-       "${userName}" = {
+    home-manager.users."${userName}" = {
+          #programs.eww = {
+	  #  enable = true;
+	  #  configDir = "/home/${userName}/.config/eww/";
+	  #};
+
           wayland.windowManager.hyprland = {
             enable = true;
       
@@ -187,6 +188,4 @@ userName: screenshotCommand: { lib, config, ... }: {
           };
         };
       };
-    };
-  };
 }
