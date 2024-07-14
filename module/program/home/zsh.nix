@@ -14,7 +14,7 @@
       users = {
         "${userName}" = {
 	  imports = [
-            (flakeRoot.nixosModules.program.zsh.default shellAliases)
+            (flakeRoot.nixosModules.program.home-manager.zsh shellAliases)
 	  ];
 
           programs.zsh = {

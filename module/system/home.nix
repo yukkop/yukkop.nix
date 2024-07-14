@@ -2,7 +2,7 @@
 {
   imports =
   [ 
-    flakeRoot.nixosModules.program.default
+    flakeRoot.nixosModules.program.root.default
     # Include the results of the hardware scan.
     flakeRoot.nixosModules.platform.lenovo-legion
 

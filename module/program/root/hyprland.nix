@@ -2,7 +2,7 @@
   options = {
     module.windowManager.hyprland = {
       enable =
-        lib.mkEnableOption "enable discord";
+        lib.mkEnableOption "enable hyprland";
     };
   };
 

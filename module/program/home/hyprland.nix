@@ -3,7 +3,7 @@ userName: screenshotCommand: { lib, config, ... }: {
   options = {
     module.home.windowManager.hyprland = {
       enable =
-        lib.mkEnableOption "enable discord";
+        lib.mkEnableOption "enable hyprland";
     };
   };
 

@@ -14,7 +14,7 @@ userName: { lib, config, inputs, flakeRoot, ...}:
     home-manager.users."${userName}" = {
       imports = [
         inputs.nixvim.homeManagerModules.nixvim 
-        flakeRoot.nixosModules.program.nixvim.default
+        flakeRoot.nixosModules.program.common.nixvim
       ];
 
       module.program.nixvim.enable = true;

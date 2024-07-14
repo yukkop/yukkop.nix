@@ -4,7 +4,7 @@
   #  inputs.impermanence.nixosModules.impermanence
   imports = [
     inputs.nixvim.nixosModules.nixvim
-    flakeRoot.nixosModules.program.nixvim.default
+    flakeRoot.nixosModules.program.common.nixvim
   ];
 
   options = {

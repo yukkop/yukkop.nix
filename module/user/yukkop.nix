@@ -10,17 +10,17 @@ in
 {
   imports = [
     inputs.home-manager.nixosModules.default
-    (flakeRoot.nixosModules.program.youtube.youtube-dl user)
-    (flakeRoot.nixosModules.program.discord user)
-    (flakeRoot.nixosModules.program.mpv user)
-    (flakeRoot.nixosModules.program.obs-studio user)
-    (flakeRoot.nixosModules.program.minecraft user)
-    (flakeRoot.nixosModules.program.qutebrowser user)
-    (flakeRoot.nixosModules.program.steam user)
-    (flakeRoot.nixosModules.program.telegram user)
-    (flakeRoot.nixosModules.program.nixvim.home-manager user)
-    (flakeRoot.nixosModules.program.zsh.home-manager user { shellAliases = shellAliases; })
-    (flakeRoot.nixosModules.program.hyprland.home-manager user "grim -g \"''$(slurp)\" - | swappy -f")
+    (flakeRoot.nixosModules.program.home.youtube.youtube-dl user)
+    (flakeRoot.nixosModules.program.home.discord user)
+    (flakeRoot.nixosModules.program.home.mpv user)
+    (flakeRoot.nixosModules.program.home.obs-studio user)
+    (flakeRoot.nixosModules.program.home.minecraft user)
+    (flakeRoot.nixosModules.program.home.qutebrowser user)
+    (flakeRoot.nixosModules.program.home.steam user)
+    (flakeRoot.nixosModules.program.home.telegram user)
+    (flakeRoot.nixosModules.program.home.nixvim user)
+    (flakeRoot.nixosModules.program.home.zsh user { shellAliases = shellAliases; })
+    (flakeRoot.nixosModules.program.home.hyprland user "grim -g \"''$(slurp)\" - | swappy -f")
   ];
 
   options = {
@@ -85,11 +85,8 @@ in
     home-manager = {
       users = {
         "${user}" = {
-          imports = let 
-  	    screenshoter = import ../program/screenshot/wayland-way.nix;
-  	  in [
+          imports = [
               inputs.impermanence.nixosModules.home-manager.impermanence
-  	      screenshoter
           ];
 
           home.stateVersion = "24.05";

@@ -1,11 +1,11 @@
 { lib, config, flakeRoot, inputs, ... }:
 {
-    imports = (with flakeRoot.nixosModules.program; [
-      hyprland.default
+    imports = (with flakeRoot.nixosModules.program.root; [
+      hyprland
       tmux
       docker
-      nixvim.nixos
-      (zsh.nixos { shellAliases = config.module.program.shellAliases; })
+      nixvim
+      (zsh { shellAliases = config.module.program.shellAliases; })
     ]) ++ (with inputs; [
       impermanence.nixosModules.impermanence
     ]);

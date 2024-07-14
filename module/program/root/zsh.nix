@@ -31,7 +31,7 @@
           home.stateVersion = "24.05";
 
 	  imports = [
-            (flakeRoot.nixosModules.program.zsh.default {})
+            (flakeRoot.nixosModules.program.home-manager.zsh {})
 	  ];
 
           programs.zsh = {
