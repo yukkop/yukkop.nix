@@ -1,6 +1,10 @@
- userName: { pkgs, lib, config, ... }: {
+ { pkgs, lib, config, ... }: 
+let
+  userName = "zalupa";
+in
+ {
   options = {
-    module.program.discord = {
+    program.discord = {
       enable =
         lib.mkEnableOption "enable discord";
       persistence =
@@ -8,14 +12,17 @@
     };
   };
 
-  config = lib.mkIf config.module.program.discord.enable {
-    home-manager.users."${userName}" = {
+  config = 
+    lib.mkIf config.program.discord.enable
+  {
+    home-manager.users."${userName}" = 
+    {
       home.packages = with pkgs; [
         discord
       ];
 
       home.persistence."/persist/home/${userName}" =
-        lib.mkIf config.module.program.discord.persistence 
+        lib.mkIf config.program.discord.persistence
       {
         directories = [
           ".config/discord"

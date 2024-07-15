@@ -9,18 +9,7 @@ let
 in
 {
   imports = [
-    inputs.home-manager.nixosModules.default
-    (flakeRoot.nixosModules.program.home.youtube.youtube-dl user)
-    (flakeRoot.nixosModules.program.home.discord user)
-    (flakeRoot.nixosModules.program.home.mpv user)
-    (flakeRoot.nixosModules.program.home.obs-studio user)
-    (flakeRoot.nixosModules.program.home.minecraft user)
-    (flakeRoot.nixosModules.program.home.qutebrowser user)
-    (flakeRoot.nixosModules.program.home.steam user)
-    (flakeRoot.nixosModules.program.home.telegram user)
-    (flakeRoot.nixosModules.program.home.nixvim user)
-    (flakeRoot.nixosModules.program.home.zsh user { shellAliases = shellAliases; })
-    (flakeRoot.nixosModules.program.home.hyprland user "grim -g \"''$(slurp)\" - | swappy -f")
+    (flakeRoot.nixosModules.program.home.default user shellAliases)
   ];
 
   options = {
@@ -54,8 +43,8 @@ in
       mpv.enable = lib.mkIf config.module.user."${user}".graphics true;
       mpv.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
-      discord.enable = lib.mkIf config.module.user."${user}".graphics true;
-      discord.persistence = lib.mkIf config.module.user."${user}".persistence true;
+      #discord.enable = lib.mkIf config.module.user."${user}".graphics true;
+      #discord.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
       minecraft.enable = lib.mkIf config.module.user."${user}".graphics true;
       minecraft.persistence = lib.mkIf config.module.user."${user}".persistence true;

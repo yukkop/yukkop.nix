@@ -47,6 +47,8 @@
         directories = [
           ".local/share/Steam"
           #".steam"
+	  # Rimworld saves
+	  ".config/unity3d/Ludeon Studios/RimWorld by Ludeon Studios/"
         ];
         allowOther = true;
       };
