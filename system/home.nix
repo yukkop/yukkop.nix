@@ -8,7 +8,6 @@
 
     flakeRoot.nixosModules.user.yukkop
 
-    inputs.disko.nixosModules.default
     (flakeRoot.nixosModules.disko.lenovo-legion { device = "/dev/nvme0n1"; })
     flakeRoot.nixosModules.preset.default
   ];

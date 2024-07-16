@@ -63,7 +63,7 @@
       });
 
       nixosModule = {
-        infrastructure = self.lib.readModulesRecursive ./module/infrastructure;
+        infrastructure = self.lib.readModulesRecursive' ./module/infrastructure;
 	environment = import ./module/environment/module.nix;
       };
 

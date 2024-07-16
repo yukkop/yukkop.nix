@@ -126,21 +126,64 @@
   #      }
   #  ) (builtins.readDir path);
 
-  readModulesRecursive = path:
-    lib.mapAttrs' (
-      name: value: let
-        name' = builtins.replaceStrings [".nix"] [""] name;
+    readSubModulesAsList = path: 
+      with lib; 
+      with builtins; let
+        paths = pipe (readDir path) [
+	  (mapAttrs (name: value:
+            if value == "regular" && hasSuffix ".nix" name && name != "module.nix" then
+              { pass = true; path =  "${path}/${name}"; }
+            else if value == "directory" then
+	      let
+                path' = "${path}/${name}/module.nix";
+	      in
+	      if pathExists "${path'}" then
+                { pass = true; path = "${path'}"; }
+	      else 
+	        { pass = false; }
+	    else
+	      { pass = false; }
+          ))
+	  ( filterAttrs (_: value: value.pass == true))
+	  (mapAttrsToList (_: value: value.path))
+        ];
       in
-        if value == "regular"
-        then {
-          name = name';
-          value = import "${path}/${name}";
-        }
-        else {
-          inherit name;
-          value = readModulesRecursive "${path}/${name}";
-        }
-    ) (builtins.readDir path);
+        paths;
+
+    /* */
+    readSubModules = path: 
+      with lib; 
+      with builtins; let
+        paths = pipe (readDir path) [
+	  (mapAttrs (name: value:
+            if value == "regular" && hasSuffix ".nix" name && name != "module.nix" then
+              { pass = true; path =  "${path}/${name}"; }
+            else if value == "directory" then
+	      let
+                path' = "${path}/${name}/module.nix";
+	      in
+	      if pathExists "${path'}" then
+                { pass = true; path = "${path'}"; }
+	      else 
+	        { pass = false; }
+	    else
+	      { pass = false; }
+          ))
+	  ( filterAttrs (_: value: value.pass == true))
+	  (mapAttrsToList (_: value: value.path))
+        ];
+        pathToName = flip pipe [
+          (removePrefix "${path}/")
+          (replaceStrings ["/module.nix" ".nix"] ["" ""])
+        ];
+        attrList =
+          map (path': {
+            name = pathToName (unsafeDiscardStringContext path');
+            value = import path';
+          })
+          paths;
+      in
+        listToAttrs attrList;
 
     readModulesRecursive' = path:
         with lib;
