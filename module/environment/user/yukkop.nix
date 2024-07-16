@@ -71,9 +71,7 @@ in
       "d /persist/home/${user} 1777 ${user} users - -"
     ];
   
-    home-manager = {
-      users = {
-        "${user}" = {
+    home-manager.users."${user}" = {
           imports = [
               inputs.impermanence.nixosModules.home-manager.impermanence
           ];
@@ -123,6 +121,4 @@ in
           };
         };
       };
-    };
-  };
 }

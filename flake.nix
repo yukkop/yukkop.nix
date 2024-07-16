@@ -62,7 +62,10 @@
         config = self.lib.defaultConfig nixpkgs-unstable;
       });
 
-      nixosModules = self.lib.readModulesRecursive ./module;
+      nixosModule = {
+        infrastructure = self.lib.readModulesRecursive ./module/infrastructure;
+	environment = import ./module/environment/module.nix;
+      };
 
       #nixosConfigurations.home = nixpkgs-24-05.lib.nixosSystem {
       #  system = "x86_64-linux";
@@ -96,7 +99,7 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs flakeRootPath;
-            flakeRoot = self;
+            outputs = self;
           };
         })
         (mkNixosConfiguration nixpkgs-24-05 "ariadne" {
@@ -112,7 +115,7 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs flakeRootPath;
-            flakeRoot = self;
+            outputs = self;
           };
         })
       ];
