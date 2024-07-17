@@ -1,28 +1,23 @@
- { pkgs, lib, config, ... }: 
-let
-  userName = "zalupa";
-in
- {
+{ pkgs, systemConfig, name, lib, config,  ... }: 
+{
   options = {
     program.discord = {
       enable =
         lib.mkEnableOption "enable discord";
-      persistence =
-        lib.mkEnableOption "enable persistence for discord config";
     };
   };
-
+ 
   config = 
     lib.mkIf config.program.discord.enable
   {
-    home-manager.users."${userName}" = 
+    home-manager.users."${name}" = 
     {
       home.packages = with pkgs; [
         discord
       ];
-
-      home.persistence."/persist/home/${userName}" =
-        lib.mkIf config.program.discord.persistence
+ 
+      home.persistence."/persist/home/${name}" =
+        lib.mkIf systemConfig.preset.impermamence
       {
         directories = [
           ".config/discord"

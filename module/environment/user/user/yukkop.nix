@@ -11,13 +11,11 @@ in
   imports = [ ];
 
   options = {
-    module.user."${user}" = {
+    preset.user."${user}" = {
       enable =
         lib.mkEnableOption "enable ${user}";
       graphics =
         lib.mkEnableOption "enable graphics for ${user}";
-      persistence =
-        lib.mkEnableOption "enable persistence for ${user}";
     };
   };
 

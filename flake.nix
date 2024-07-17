@@ -66,7 +66,7 @@
         infrastructure = self.lib.readModulesRecursive ./module/infrastructure;
 	environment = {
 	  module = import ./module/environment/module.nix;
-	  program.config = self.lib.readModulesRecursive ./module/environment/program/config;
+	  common = self.lib.readModulesRecursive ./module/environment/common;
 	  preset = self.lib.readModulesRecursive ./module/environment/preset;
 	};
       };

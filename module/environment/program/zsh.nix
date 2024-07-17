@@ -9,7 +9,7 @@ in
         lib.mkEnableOption "enable steam";
       config = lib.mkOption {
         type = lib.types.anything;
-	default = nixosModules.environment.program.config.zsh.common;
+	default = nixosModules.environment.common.program.zsh.default;
 	apply = x: if lib.isFunction x then x else if lib.isAttrs x then x else throw "${cfg}.config must be a function or a attrs";
         description = ''
 	  zsh config attributes or fuction that return its

@@ -15,7 +15,7 @@ in
         lib.mkEnableOption "enable nixvim";
       config = lib.mkOption {
         type = lib.types.anything;
-        default = nixosModules.environment.program.config.nixvim.common;
+        default = nixosModules.environment.common.program.nixvim.default;
         apply = x: if lib.isFunction x then x else if lib.isAttrs x then x else throw "${cfg}.config must be a function or a attrs";
         description = ''
           nixvim config attributes or fuction that return its

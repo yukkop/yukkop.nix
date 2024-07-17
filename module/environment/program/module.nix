@@ -1,4 +1,4 @@
-{ outputs, config, lib, ... }:
+{ outputs, config, lib, inputs, ... }:
 let
   cfg = config.preset.program;
 in
@@ -30,5 +30,11 @@ in
 
     # disable default not strictly necessary packages - nano, perl, etc
     environment.defaultPackages = lib.mkIf (!cfg.defaultPackages) [];
+
+    home-manager.users.root = {
+      imports = [ inputs.impermanence.nixosModules.home-manager.impermanence ];
+
+      home.stateVersion = "24.05";
+    };
   };
 }
