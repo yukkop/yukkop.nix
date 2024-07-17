@@ -8,8 +8,6 @@ let
   };
 in
 {
-  imports = [ ];
-
   options = {
     preset.user."${user}" = {
       enable =
@@ -20,7 +18,7 @@ in
   };
 
 
-  config = lib.mkIf config.module.user."${user}".enable {
+  config = lib.mkIf config.preset.user."${user}".enable {
 
     #module.home.user."${user}".program = {
     #  nixvim.enable = true;
