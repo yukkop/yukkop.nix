@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }@args:
 let 
   readUsers = path: 
     with lib; 
@@ -8,7 +8,7 @@ let
 	attrNames
         (map (name: { 
 	  name = builtins.replaceStrings [".nix"] [""] name;
-	  value = { enable = mkEnableOption ""; };
+	  value = import "${path}/${name}" args;
 	}))
 	listToAttrs
       ];
@@ -16,9 +16,9 @@ let
       paths;
 in
 {
-  user = readUsers ./user;
-
   options = {
+    preset.user = readUsers ./user;
+
   };
 
   config = {
