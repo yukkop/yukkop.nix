@@ -1,4 +1,4 @@
-{ config, lib, flakeRoot, inputs, ... }: {
+{ config, lib, inputs, ... }: {
   #  neccessary imports
   #  inputs.impermanence.nixosModules.impermanence
  
@@ -12,31 +12,34 @@
   };
 
   /*  */
-  config = lib.mkIf config.module.program.zsh.enable {
-   programs.zsh = {
-     enable = true;
-     shellAliases = shellAliases;
-   };
+  config = lib.mkIf config.module.program.zsh.enable (lib.mkMerge [
+    {
+      programs.zsh = {
+        enable = true;
+        shellAliases = {};
+      };
 
-   environment.persistence."/persist/system" = 
-     lib.mkIf config.module.program.zsh.persistence
-   {
-     hideMounts = true;
-     directories = [
-       "/root/.zsh"
-     ];
-   };
 
-    home-manager.users.root = {
-          home.stateVersion = "24.05";
-
-	  imports = [
-            (flakeRoot.nixosModules.program.home-manager.zsh {})
-	  ];
-
-          programs.zsh = {
-            enable = true;
-          };
+      home-manager.users.root = {
+        home.stateVersion = "24.05";
+      
+        imports = [
+	  #TODO
+        ];
+      
+        programs.zsh = {
+          enable = true;
         };
       };
+    }
+    (lib.mkIf config.module.program.zsh.persistence {
+      home-manager.users.root.environment.persistence."/persist/system" = 
+      {
+        hideMounts = true;
+        directories = [
+          "/root/.zsh"
+        ];
+      };
+    })
+  ]);
 }

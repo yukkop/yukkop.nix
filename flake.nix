@@ -62,8 +62,8 @@
         config = self.lib.defaultConfig nixpkgs-unstable;
       });
 
-      nixosModule = {
-        infrastructure = self.lib.readModulesRecursive' ./module/infrastructure;
+      nixosModules = {
+        infrastructure = self.lib.readModulesRecursive ./module/infrastructure;
 	environment = import ./module/environment/module.nix;
       };
 
@@ -81,7 +81,7 @@
       # this string, it will return strange unreadble error
       # allowing unfree in any another place does not fix it
       nixosConfigurations = let 
-        mkNixosConfiguration = self.lib.mkNixosConfiguration ./module;
+        mkNixosConfiguration = self.lib.mkNixosConfiguration ./.;
       in builtins.listToAttrs [
         (mkNixosConfiguration nixpkgs-24-05 "home" {
           config = { 

@@ -8,9 +8,7 @@ let
   };
 in
 {
-  imports = [
-    (flakeRoot.nixosModules.program.home.default user shellAliases)
-  ];
+  imports = [ ];
 
   options = {
     module.user."${user}" = {
@@ -26,40 +24,40 @@ in
 
   config = lib.mkIf config.module.user."${user}".enable {
 
-    module.home.user."${user}".program = {
-      nixvim.enable = true;
-      nixvim.persistence = lib.mkIf config.module.user."${user}".persistence true;
+    #module.home.user."${user}".program = {
+    #  nixvim.enable = true;
+    #  nixvim.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
-      zsh.enable = true;
-      zsh.persistence = lib.mkIf config.module.user."${user}".persistence true;
-    };
-    module.program = {
-      steam.enable = lib.mkIf config.module.user."${user}".graphics true;
-      steam.persistence = lib.mkIf config.module.user."${user}".persistence true;
+    #  zsh.enable = true;
+    #  zsh.persistence = lib.mkIf config.module.user."${user}".persistence true;
+    #};
+    #module.program = {
+    #  steam.enable = lib.mkIf config.module.user."${user}".graphics true;
+    #  steam.persistence = lib.mkIf config.module.user."${user}".persistence true;
   
-      qutebrowser.enable = lib.mkIf config.module.user."${user}".graphics true;
-      qutebrowser.persistence = lib.mkIf config.module.user."${user}".persistence true;
+    #  qutebrowser.enable = lib.mkIf config.module.user."${user}".graphics true;
+    #  qutebrowser.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
-      mpv.enable = lib.mkIf config.module.user."${user}".graphics true;
-      mpv.persistence = lib.mkIf config.module.user."${user}".persistence true;
+    #  mpv.enable = lib.mkIf config.module.user."${user}".graphics true;
+    #  mpv.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
-      #discord.enable = lib.mkIf config.module.user."${user}".graphics true;
-      #discord.persistence = lib.mkIf config.module.user."${user}".persistence true;
+    #  #discord.enable = lib.mkIf config.module.user."${user}".graphics true;
+    #  #discord.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
-      minecraft.enable = lib.mkIf config.module.user."${user}".graphics true;
-      minecraft.persistence = lib.mkIf config.module.user."${user}".persistence true;
+    #  minecraft.enable = lib.mkIf config.module.user."${user}".graphics true;
+    #  minecraft.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
-      obs-studio.enable = lib.mkIf config.module.user."${user}".graphics true;
-      obs-studio.persistence = lib.mkIf config.module.user."${user}".persistence true;
+    #  obs-studio.enable = lib.mkIf config.module.user."${user}".graphics true;
+    #  obs-studio.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
-      telegram.enable = lib.mkIf config.module.user."${user}".graphics true;
-      telegram.persistence = lib.mkIf config.module.user."${user}".persistence true;
+    #  telegram.enable = lib.mkIf config.module.user."${user}".graphics true;
+    #  telegram.persistence = lib.mkIf config.module.user."${user}".persistence true;
 
-      tmux.enable = true;
-      youtube-dl.enable = true;
-    };
+    #  tmux.enable = true;
+    #  youtube-dl.enable = true;
+    #};
 
-    module.home.windowManager.hyprland.enable = lib.mkIf config.module.user."${user}".graphics true;
+    #module.home.windowManager.hyprland.enable = lib.mkIf config.module.user."${user}".graphics true;
   
     users.users."${user}" = {
      isNormalUser = true;

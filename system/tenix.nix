@@ -2,8 +2,8 @@
 {
   imports =
   [ 
-    outputs.nixosModules.platform.hetzner-amd2
-    outputs.nixosModules.preset.default
+    outputs.nixosModules.infrastructure.platform.hetzner-amd2
+    outputs.nixosModules.environment
   ];
 
   # Use the systemd-boot EFI boot loader.

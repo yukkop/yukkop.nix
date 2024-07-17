@@ -1,32 +1,10 @@
-{ lib, config, outputs, inputs, ... }:
-{
-    options = {
-     #module.program = {
-     #  defaultConfig = lib.mkOption {
-     #    type = lib.types.bool;
-     #    default = true;
-     #    description = "enable default program config that yukkop prefer - zsh, tmux, nixvim etc";
-     #    example = false;
-     #  };
+{ inputs, outputs, ... }: {
+  imports = (outputs.lib.readSubModulesAsList ./.);
 
-       # literaty useles, will anyone enable it?
-       defaultPackages = 
-         lib.mkEnableOption "enable default not strictly necessary packages - nano, perl, etc";
 
-     #  shellAliases = lib.mkOption {
-     #    type = lib.types.attrs;
-     #    default = {};
-     #    description = "Shell alliases, would provide to all enable shell";
-     #    example = {
-     #      tmux = "tmux a";
-     #      ll = "ls -la";
-     #    };
-     #  };
-     #};
-    };
+  home-manager.users.root = {
+    imports = [ inputs.impermanence.nixosModules.home-manager.impermanence ];
 
-    config = {
-      # disable default not strictly necessary packages - nano, perl, etc
-      #environment.defaultPackages = lib.mkIf (!config.options.module.program.defaultPackages) [];
-    };
+    home.stateVersion = "24.05";
+  };
 }

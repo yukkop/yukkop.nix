@@ -1,3 +1,4 @@
-{ outputs, ... }: {
+{ outputs, ... }:
+{
   imports = (outputs.lib.readSubModulesAsList ./.);
 }

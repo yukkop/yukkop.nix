@@ -110,21 +110,45 @@
     });
   };
 
-  #readModulesRecursive = path:
-  #  lib.mapAttrs' (
-  #    name: value: let
-  #      name' = builtins.replaceStrings [".nix"] [""] name;
-  #    in
-  #      if value == "regular"
-  #      then {
-  #        name = name';
-  #        value = import "${path}/${name}";
-  #      }
-  #      else {
-  #        inherit name;
-  #        value = readModulesRecursive "${path}/${name}";
-  #      }
-  #  ) (builtins.readDir path);
+  readModulesRecursive = path:
+    lib.mapAttrs' (
+      name: value: let
+        name' = builtins.replaceStrings [".nix"] [""] name;
+      in
+        if value == "regular"
+        then {
+          name = name';
+          value = import "${path}/${name}";
+        }
+        else {
+          inherit name;
+          value = readModulesRecursive "${path}/${name}";
+        }
+    ) (builtins.readDir path);
+
+    readSubModulesAsListWithArgs = path: args: 
+      with lib; 
+      with builtins; let
+        paths = pipe (readDir path) [
+	  (mapAttrs (name: value:
+            if value == "regular" && hasSuffix ".nix" name && name != "module.nix" then
+              { pass = true; path =  "${path}/${name}"; }
+            else if value == "directory" then
+	      let
+                path' = "${path}/${name}/module.nix";
+	      in
+	      if pathExists "${path'}" then
+                { pass = true; path = "${path'}"; }
+	      else 
+	        { pass = false; }
+	    else
+	      { pass = false; }
+          ))
+	  ( filterAttrs (_: value: value.pass == true))
+	  (mapAttrsToList (_: value: (import value.path args)))
+        ];
+      in
+        paths;
 
     readSubModulesAsList = path: 
       with lib; 

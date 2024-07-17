@@ -1,4 +1,4 @@
-{ streamHost, letsEncryptEmail, ... }: { pkgs, config, lib, ... }:
+{ pkgs, config, lib, ... }:
 let
   # Define a custom Nginx with RTMP module
   nginxWithRtmp = pkgs.nginxStable.override {
@@ -33,10 +33,31 @@ let
 in
 {
   options = {
-    module.server.nginx-rtmp.enable = lib.mkEnableOption "enable nxginx rtmp server";
+    module.server.nginx-rtmp = {
+      enable = lib.mkEnableOption "enable nxginx rtmp server";
+      streamHost = lib.mkOption {
+        type = lib.types.str;
+        description = ''
+	  host
+        '';
+      };
+      letsEncryptEmail = lib.mkOption {
+        type = lib.types.str;
+        #apply = x: assert (builtins.stringLength x < 32 || abort "'${x}' is not looks like email"); x;
+        description = ''
+	  email
+        '';
+      };
+    }; 
   };
   
-  config = lib.mkIf config.module.server.nginx-rtmp.enable {
+  config = 
+  let
+    streamHost = config.module.server.nginx-rtmp.streamHost;
+    letsEncryptEmail = config.module.server.nginx-rtmp.letsEncryptEmail;
+  in
+  lib.mkIf config.module.server.nginx-rtmp.enable
+  {
     # Create necessary directories and files
     environment.etc."nginx/html/stream.html".text = streamHtml;
     environment.etc."nginx/xsl/stat.xsl".source = pkgs.fetchurl {
