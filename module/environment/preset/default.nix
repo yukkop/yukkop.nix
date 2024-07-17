@@ -1,8 +1,9 @@
-{ lib, pkgs, outputs, ... }@args: 
+{ lib, pkgs, outputs, config, nixosModules, ... }@args: 
 {
   imports = [
-
+    nixosModules.environment.module
   ];
+
   options = with lib; {
     preset.enable = mkEnableOption "enable defatult preset";
     preset.name = mkOption {
@@ -22,7 +23,9 @@
   };
   
   config = {
-    #users.defaultUserShell = pkgs.zsh;
+    users.defaultUserShell = pkgs.zsh;
+
+    preset.program.zsh.enable = true;
 
     nix = {
       settings = {

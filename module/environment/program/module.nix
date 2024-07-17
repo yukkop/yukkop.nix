@@ -1,7 +1,5 @@
-{ outputs, ... }@args:
+{ outputs, config, ... }:
 {
   imports = 
-     with outputs.lib; 
-     # moduleConfigs, common / shared configuration for programs
-     (readSubModulesAsListWithArgs ./. (args // { moduleConfigs =  readModulesRecursive ./config; }));
+     with outputs.lib; (readSubModulesAsList ./.);
 }

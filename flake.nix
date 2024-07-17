@@ -64,7 +64,11 @@
 
       nixosModules = {
         infrastructure = self.lib.readModulesRecursive ./module/infrastructure;
-	environment = import ./module/environment/module.nix;
+	environment = {
+	  module = import ./module/environment/module.nix;
+	  program.config = self.lib.readModulesRecursive ./module/environment/program/config;
+	  preset = self.lib.readModulesRecursive ./module/environment/preset;
+	};
       };
 
       #nixosConfigurations.home = nixpkgs-24-05.lib.nixosSystem {
@@ -98,8 +102,9 @@
           config = { };
           system = "x86_64-linux";
           specialArgs = {
-            inherit inputs flakeRootPath;
+            inherit inputs;
             outputs = self;
+            nixosModules = self.nixosModules;
           };
         })
         (mkNixosConfiguration nixpkgs-24-05 "ariadne" {
