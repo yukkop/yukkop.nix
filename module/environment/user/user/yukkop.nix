@@ -1,4 +1,4 @@
-{ pkgs, inputs, flakeRoot ? null, lib, config, ... }:
+{ inputs, lib, config, ... }:
 let 
   user = "yukkop";
   shellAliases = {
@@ -9,16 +9,16 @@ let
 in
 {
   options = {
-    preset.user."${user}" = {
       enable =
         lib.mkEnableOption "enable ${user}";
       graphics =
         lib.mkEnableOption "enable graphics for ${user}";
-    };
   };
 
 
-  config = lib.mkIf config.preset.user."${user}".enable {
+  config = 
+    #lib.mkIf config.enable 
+  {
 
     #module.home.user."${user}".program = {
     #  nixvim.enable = true;
@@ -72,29 +72,25 @@ in
 
           home.stateVersion = "24.05";
   
-          home.persistence."/persist/home/${user}" = lib.mkIf config.module.user."${user}".persistence {
-            directories = [
-              "Downloads"
-              "pj"
-              "ms"
-              "pc"
-              "dc"
-  	      "mc"
-              "vd"
-              ".ssh"
-  	      ".config/tmux" # TODO: in tmux module
-  	      ".tmux" # TODO: in tmux module
-            ];
-            files = [
-  	      # FIXME simlynks issue
-              "dw" # link to Downloads
-            ];
-            allowOther = true; # allows other users, such as root, to access files
-          };
-  
-  	  home.packages = with pkgs; [
-  	    htop
-  	  ];
+          #home.persistence."/persist/home/${user}" = lib.mkIf config.persistence {
+          #  directories = [
+          #    "Downloads"
+          #    "pj"
+          #    "ms"
+          #    "pc"
+          #    "dc"
+  	  #    "mc"
+          #    "vd"
+          #    ".ssh"
+  	  #    ".config/tmux" # TODO: in tmux module
+  	  #    ".tmux" # TODO: in tmux module
+          #  ];
+          #  files = [
+  	  #    # FIXME simlynks issue
+          #    "dw" # link to Downloads
+          #  ];
+          #  allowOther = true; # allows other users, such as root, to access files
+          #};
   
   	  programs = {
   	    bash = {
