@@ -26,9 +26,6 @@
      mkNixosConfiguration ./module inputs.nixpkgs-23-05 "my-system-custom" {
        system = "aarch64-linux"; 
        pkgs = mypkgs;
-       lib = mypkgs.lib;
-       modules = [
-         ./path/to/configuration.nix
          ({ networking.hostName = "my-system-hostname" })
        ];
        specialArgs = { inherit foo bar baz; }
@@ -229,4 +226,11 @@
             paths;
         in
           listToAttrs attrList;
+
+      evaluateAttrOrFunction = value: args: 
+       (if lib.isFunction value  then
+         value args
+       else
+         value) 
+       // { enable = true; };
 }

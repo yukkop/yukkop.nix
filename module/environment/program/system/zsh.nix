@@ -1,6 +1,6 @@
-{ config, lib, nixosModules, ... }@args:
+{ config, lib, nixosModules, outputs, ... }@args:
 let
-  cfg = config.preset.program;
+  cfg = config.preset.program.zsh;
 in
 {
   options = {
@@ -10,7 +10,7 @@ in
       config = lib.mkOption {
         type = lib.types.anything;
 	default = nixosModules.environment.program.config.zsh.common;
-	apply = x: if lib.isFunction x then x else if lib.isAttrs x then x else throw "${cfg}.zsh.config must be a function or a attrs";
+	apply = x: if lib.isFunction x then x else if lib.isAttrs x then x else throw "${cfg}.config must be a function or a attrs";
         description = ''
 	  zsh config attributes or fuction that return its
         '';
@@ -19,7 +19,7 @@ in
   };
 
   /*  */
-  config = lib.mkIf cfg.zsh.enable (lib.mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       programs.zsh = {
         enable = true;
@@ -30,13 +30,7 @@ in
       home-manager.users.root = {
         home.stateVersion = "24.05";
       
-	programs.zsh = 
-	  (let zshConfig = cfg.zsh.config; in 
-	  if lib.isFunction zshConfig then
-	    zshConfig args
-	  else
-	    zshConfig) 
-	  // { enable = true; };
+        programs.zsh = outputs.lib.evaluateAttrOrFunction cfg.config args;
       };
     }
     (lib.mkIf config.preset.impermanence {
