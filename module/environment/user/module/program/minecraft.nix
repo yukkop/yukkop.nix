@@ -24,7 +24,7 @@ in
       ];
 
       home.persistence."/persist/home/${user}" = 
-        lib.mkIf config.impermamence 
+        lib.mkIf config.preset.impermanence 
       {
         directories = [
           ".local/share/PrismLauncher/"

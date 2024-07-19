@@ -20,7 +20,7 @@ in
         enable = true;
 	settings = {
 	  webengine = {
-            qt.qpa.platform = lib.mkIf config.module.program.qutebrowser.wayland "wayland";
+            qt.qpa.platform = lib.mkIf cfg.wayland "wayland";
 	  };
 	};
       };

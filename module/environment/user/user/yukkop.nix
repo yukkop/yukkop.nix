@@ -41,31 +41,30 @@ in
     lib.mkIf cfg.enable 
   {
     preset.user."${user}" = {
-      #program = {
-      #  nixvim.enable = true;
+      program = {
+        nixvim.enable = true;
 
-      #  zsh.enable = true;
+        zsh.enable = true;
 
-      #  steam.enable = lib.mkIf cfg."${user}".graphics true;
+        steam.enable = lib.mkIf cfg.graphics true;
   
-      #  qutebrowser.enable = lib.mkIf cfg.graphics true;
+        qutebrowser.enable = lib.mkIf cfg.graphics true;
 
-      #  mpv.enable = lib.mkIf cfg.graphics true;
+        #mpv.enable = lib.mkIf cfg.graphics true;
 
-      #  discord.enable = lib.mkIf cfg.graphics true;
+        discord.enable = lib.mkIf cfg.graphics true;
 
-      #  minecraft.enable = lib.mkIf cfg.graphics true;
+        minecraft.enable = lib.mkIf cfg.graphics true;
 
-      #  obs-studio.enable = lib.mkIf cfg.graphics true;
+        obs-studio.enable = lib.mkIf cfg.graphics true;
 
-      #  telegram.enable = lib.mkIf cfg.graphics true;
+        #telegram.enable = lib.mkIf cfg.graphics true;
 
-      #  tmux.enable = true;
-      #  youtube-dl.enable = true;
-      #};
-      #windowManager = lib.mkIf cfg.graphics {
-      #  hyprland = lib.mkIf cfg.graphics true;
-      #};
+        youtube-dl.enable = true;
+      };
+      windowManager = lib.mkIf cfg.graphics {
+        hyprland.enable = lib.mkIf cfg.graphics true;
+      };
     };
 
     users.users."${user}" = {

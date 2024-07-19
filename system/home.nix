@@ -1,42 +1,11 @@
-{ config, lib, pkgs, inputs, flakeRoot, ... }:
+{ config, lib, pkgs, outputs, ... }:
 {
-  imports =
+  imports = with outputs.nixosModules;
   [ 
-    flakeRoot.nixosModules.program.root.default
-    # Include the results of the hardware scan.
-    flakeRoot.nixosModules.platform.lenovo-legion
-
-    flakeRoot.nixosModules.user.yukkop
-
-    (flakeRoot.nixosModules.disko.lenovo-legion { device = "/dev/nvme0n1"; })
-    flakeRoot.nixosModules.preset.default
+    infrastructure.platform.lenovo-legion
+    (infrastructure.disko.lenovo-legion {  device = "/dev/nvme0n1"; })
+    environment.preset.default
   ];
-
-  module.user.yukkop = {
-    enable = true;
-    graphics = true;
-    persistence = true;
-  };
-
-  module.program.shellAliases = {
-    nr = "sudo nixos-rebuild switch --flake /persist/nixos#home";
-    nrb = "sudo nixos-rebuild boot --flake /persist/nixos#home";
-  };
-
-  module.windowManager.hyprland = {
-    enable = true;
-  };
-
-  module.program = {
-    nixvim = {
-      enable = true;
-      persistence = true;
-    };
-    zsh = {
-      enable = true;
-      persistence = true;
-    };
-  };
 
   users.defaultUserShell = pkgs.zsh;
 
@@ -71,26 +40,6 @@
 
   users.groups.owner = {};
 
-  fileSystems."/persist".neededForBoot = true;
-  environment.persistence."/persist/system" = {
-    hideMounts = true;
-    directories = [
-      "/etc/nixos"
-      "/etc/ssh"
-      "/var/log"
-      "/var/lib/bluetooth"
-      # TODO: check if this is exist
-      #"/var/lib/nixos"
-      "/var/lib/systemd/coredump"
-      "/etc/NetworkManager/systemd-connections"
-      { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
-    ];
-    files = [
-      "/etc/machine-id"
-      #{ file = "/var/keys/secret_file"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
-    ];
-  };
-
   # something for impermanence work with home-manager
   programs.fuse.userAllowOther = true;
 
@@ -114,7 +63,7 @@
     };
   };
 
-  programs.bash.shellAliases = config.module.program.shellAliases;
+  programs.bash.shellAliases = config.preset.shellAliases;
 
   # TODO: x server
   #services.xserver.xkb = {

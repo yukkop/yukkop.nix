@@ -97,7 +97,8 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs flakeRootPath;
-            flakeRoot = self;
+            outputs = self;
+            nixosModules = self.nixosModules;
           };
         })
         (mkNixosConfiguration nixpkgs-24-05 "tenix" {
@@ -114,7 +115,8 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs flakeRootPath;
-            flakeRoot = self;
+            outputs = self;
+            nixosModules = self.nixosModules;
           };
         })
         (mkNixosConfiguration nixpkgs-24-05 "neverlate" {

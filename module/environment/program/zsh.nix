@@ -34,12 +34,12 @@ in
       };
     }
     (lib.mkIf config.preset.impermanence {
-      home-manager.users.root.environment.persistence."/persist/system" = 
+      home-manager.users.root.home.persistence."/persist/system" = 
       {
-        hideMounts = true;
         directories = [
           "/root/.zsh"
         ];
+	allowOther = true;
       };
     })
   ]);

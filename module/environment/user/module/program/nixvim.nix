@@ -1,4 +1,4 @@
-user: { lib, config, inputs, flakeRoot, ...}:
+user: { lib, config, inputs, nixosModules, outputs, ...}@args:
 let
   cfg = config.preset.user."${user}".program.nixvim;
 in
@@ -9,6 +9,14 @@ in
         lib.mkEnableOption "enable nixvim";
       persistence =
         lib.mkEnableOption "enable persistence for nixvim config";
+      config = lib.mkOption {
+        type = lib.types.anything;
+        default = nixosModules.environment.common.program.nixvim.default;
+        apply = x: if lib.isFunction x then x else if lib.isAttrs x then x else throw "${cfg}.config must be a function or a attrs";
+        description = ''
+          nixvim config attributes or fuction that return its
+        '';
+      };
     };
   };
 
@@ -17,14 +25,13 @@ in
     home-manager.users."${user}" = {
       imports = [
         inputs.nixvim.homeManagerModules.nixvim 
-        flakeRoot.nixosModules.program.common.nixvim
       ];
 
-      module.program.nixvim.enable = true;
+      programs.nixvim = outputs.lib.evaluateAttrOrFunction cfg.config args;
 
-      # impermamence
+      # impermanence
       home.persistence."/persist/home/${user}" = 
-       lib.mkIf config.preset.impermamence
+       lib.mkIf config.preset.impermanence
       {
         directories = [
           "$XDG_DATA_HOME/nvim/treesitter"
