@@ -9,7 +9,11 @@
   config = with lib; mkMerge [
     {
       preset.impermanence = mkDefault true;
+
       preset.graphics = mkDefault true;
+
+      preset.windowManager.hyprland.enable = config.preset.graphics;
+
       users.defaultUserShell = pkgs.zsh;
 
       preset.program.zsh.enable = true;

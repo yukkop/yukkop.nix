@@ -1,12 +1,16 @@
-{ pkgs, lib, config, ... }: {
+{ pkgs, lib, config, ... }: 
+let
+   cfg = config.preset.windowManager.hyprland;
+in
+{
   options = {
-    module.windowManager.hyprland = {
+    preset.windowManager.hyprland = {
       enable =
         lib.mkEnableOption "enable hyprland";
     };
   };
 
-  config = lib.mkIf config.module.windowManager.hyprland.enable {
+  config = lib.mkIf cfg.enable {
     programs.hyprland = {
       enable = true;
       #package = inputs.hyprland.packages."${pkgs.system}".hyprland;

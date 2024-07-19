@@ -1,11 +1,11 @@
-user: { pkgs, lib, config, ... }:
+user: { pkgs, lib, config, ... }: 
 let
   userCfg = config.preset.user."${user}";
-  cfg = "${userCfg}".program.mpv;
+  cfg = userCfg.program.telegram;
 in
 {
   options = {
-    preset.user."${user}".program.mpv = {
+    preset.user."${user}".program.telegram = {
       enable =
         lib.mkEnableOption "enable mpv";
       persistence =
@@ -15,20 +15,19 @@ in
 
   config = lib.mkIf cfg.enable {
     preset.user."${user}".shellAliases = {
-      mpvf = "mpv --osd-msg1='\${estimated-frame-number} / \${estimated-frame-count}'";
+      telegram = "telegram-desktop";
     };
 
     home-manager.users."${user}" = {
       home.packages = with pkgs; [
-        mpv
+  	telegram-desktop
       ];
   
       home.persistence."/persist/home/${user}" = 
         lib.mkIf config.preset.impermanence 
       {
-
         directories = [
-          ".config/mpv"
+  	  ".local/share/TelegramDesktop"
         ];
         allowOther = true;
       };

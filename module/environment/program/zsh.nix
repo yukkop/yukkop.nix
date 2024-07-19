@@ -23,7 +23,7 @@ in
     {
       programs.zsh = {
         enable = true;
-        shellAliases = {};
+        shellAliases = config.preset.shellAliases;
       };
 
 

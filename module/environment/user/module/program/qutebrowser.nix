@@ -7,8 +7,6 @@ in
     preset.user."${user}".program.qutebrowser = {
       enable =
         lib.mkEnableOption "enable qutebrowser";
-      persistence =
-        lib.mkEnableOption "enable persistence for qutebrowser data";
       wayland =
         lib.mkEnableOption "preferences neccessary if you use wayland";
     };

@@ -1,4 +1,4 @@
-{ inputs, lib, config, nixosModules, pkgs,  ... }@args:
+{ inputs, lib, config, nixosModules,  ... }@args:
 let 
   user = "yukkop";
   cfg = config.preset.user."${user}";
@@ -41,10 +41,13 @@ in
     lib.mkIf cfg.enable 
   {
     preset.user."${user}" = {
+      shellAliases = shellAliases;
       program = {
         nixvim.enable = true;
 
         zsh.enable = true;
+
+        terminal.kitty.enable = true;
 
         steam.enable = lib.mkIf cfg.graphics true;
   

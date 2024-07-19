@@ -1,6 +1,7 @@
 user: { config, lib,  outputs, nixosModules, ... }@args: 
 let
-  cfg = config.preset.user."${user}".program.zsh;
+  userCfg = config.preset.user."${user}";
+  cfg = userCfg.program.zsh;
 in
 {
   options = {
@@ -28,7 +29,7 @@ in
 	  imports = [
 	  ];
 
-          programs.zsh = outputs.lib.evaluateAttrOrFunction cfg.config args;
+          programs.zsh = (outputs.lib.evaluateAttrOrFunction cfg.config args) // { shellAliases = userCfg.shellAliases; };
 
           home.persistence."/persist/home/${user}" = 
             lib.mkIf config.preset.impermanence 
