@@ -85,7 +85,7 @@ in
 
           home.stateVersion = "24.05";
   
-          home.persistence."/persist/home/${user}" = lib.mkIf config.impermanence {
+          home.persistence."/persist/home/${user}" = lib.mkIf config.preset.impermanence {
             directories = [
               "Downloads"
               "pj"

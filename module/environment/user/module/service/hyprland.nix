@@ -1,6 +1,6 @@
 user: { lib, config, ... }:
 let
-  cfg = config.user."${user}".windowManager.hyprland;
+  cfg = config.preset.user."${user}".windowManager.hyprland;
 in
 {
   /* this module may include in home-manager module */

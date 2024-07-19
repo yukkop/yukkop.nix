@@ -4,7 +4,7 @@ let
 in
 {
   options = {
-    preset.user."${user}".prorgam.obs-studio = {
+    preset.user."${user}".program.obs-studio = {
       enable =
         lib.mkEnableOption "enable obs-studio";
       persistence =

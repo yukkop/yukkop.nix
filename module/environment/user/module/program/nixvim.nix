@@ -1,10 +1,10 @@
 user: { lib, config, inputs, flakeRoot, ...}:
 let
-  cfg = config.preset.preset.user."${user}".program.nixvim;
+  cfg = config.preset.user."${user}".program.nixvim;
 in
 {
   options = {
-    preset.preset.user."${user}".program.nixvim = {
+    preset.user."${user}".program.nixvim = {
       enable =
         lib.mkEnableOption "enable nixvim";
       persistence =
