@@ -1,4 +1,4 @@
-user: { outputs, pkgs, ... }@args:
+user: { outputs, ... }:
 {
   imports = (outputs.lib.readSubModulesAsListWithArgs ./. user);
 

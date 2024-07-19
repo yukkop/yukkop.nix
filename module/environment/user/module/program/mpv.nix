@@ -1,6 +1,11 @@
- userName: { pkgs, lib, config, ... }: {
+user: { pkgs, lib, config, ... }:
+let
+  userCfg = config.preset.user."${user}";
+  cfg = "${userCfg}".program.mpv;
+in
+{
   options = {
-    module.program.mpv = {
+    preset.user."${user}".program.mpv = {
       enable =
         lib.mkEnableOption "enable mpv";
       persistence =
@@ -8,18 +13,18 @@
     };
   };
 
-  config = lib.mkIf config.module.program.mpv.enable {
-    module.program.shellAliases = {
+  config = lib.mkIf cfg.enable {
+    preset.user."${user}".shellAliases = {
       mpvf = "mpv --osd-msg1='\${estimated-frame-number} / \${estimated-frame-count}'";
     };
 
-    home-manager.users."${userName}" = {
+    home-manager.users."${user}" = {
       home.packages = with pkgs; [
         mpv
       ];
   
-      home.persistence."/persist/home/${userName}" = 
-        lib.mkIf config.module.program.mpv.persistence 
+      home.persistence."/persist/home/${user}" = 
+        lib.mkIf config.preset.impermamence 
       {
 
         directories = [

@@ -1,6 +1,10 @@
-userName: { pkgs, lib, config, ... }: {
+user: { pkgs, lib, config, ... }: 
+let
+  cfg = config.preset.user."${user}".program.minecraft;
+in
+{
   options = {
-    module.program.minecraft = {
+    preset.user."${user}".program.minecraft = {
       enable =
         lib.mkEnableOption "enable minecraft";
       persistence =
@@ -8,8 +12,8 @@ userName: { pkgs, lib, config, ... }: {
     };
   };
 
-  config = lib.mkIf config.module.program.minecraft.enable {
-    home-manager.users."${userName}" = {
+  config = lib.mkIf cfg.enable {
+    home-manager.users."${user}" = {
       home.packages = with pkgs;
       [
         # TODO: some overlay with config
@@ -19,8 +23,8 @@ userName: { pkgs, lib, config, ... }: {
         (lowPrio openjdk17)
       ];
 
-      home.persistence."/persist/home/${userName}" = 
-        lib.mkIf config.module.program.minecraft.persistence 
+      home.persistence."/persist/home/${user}" = 
+        lib.mkIf config.impermamence 
       {
         directories = [
           ".local/share/PrismLauncher/"

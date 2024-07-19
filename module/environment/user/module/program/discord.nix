@@ -1,23 +1,26 @@
-{ pkgs, systemConfig, name, lib, config,  ... }: 
+user: { pkgs, lib, config,  ... }: 
+let
+  cfg = config.preset.user."${user}".program.discord;
+in
 {
   options = {
-    program.discord = {
+    preset.user."${user}".program.discord = {
       enable =
         lib.mkEnableOption "enable discord";
     };
   };
  
   config = 
-    lib.mkIf config.program.discord.enable
+    lib.mkIf cfg.enable
   {
-    home-manager.users."${name}" = 
+    home-manager.users."${user}" = 
     {
       home.packages = with pkgs; [
         discord
       ];
  
-      home.persistence."/persist/home/${name}" =
-        lib.mkIf systemConfig.preset.impermamence
+      home.persistence."/persist/home/${user}" =
+        lib.mkIf config.preset.impermamence
       {
         directories = [
           ".config/discord"

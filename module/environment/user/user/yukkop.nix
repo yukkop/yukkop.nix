@@ -1,6 +1,7 @@
-{ inputs, lib, config, ... }:
+{ inputs, lib, config, nixosModules, pkgs,  ... }@args:
 let 
   user = "yukkop";
+  cfg = config.preset.user."${user}";
   shellAliases = {
     dev = "nix develop -c zsh";
     hlog = "cat $XDG_RUNTIME_DIR/hypr/$(ls -t $XDG_RUNTIME_DIR/hypr/ | head -n 2 | tail -n 1)/hyprland.log";
@@ -8,53 +9,65 @@ let
   };
 in
 {
+  imports = [
+    (nixosModules.environment.preset.user.module user)
+  ];
+  
   options = {
-      enable =
-        lib.mkEnableOption "enable ${user}";
-      graphics =
-        lib.mkEnableOption "enable graphics for ${user}";
+      preset.user."${user}" = {
+        enable =
+          lib.mkEnableOption "enable ${user}";
+        graphics = lib.mkOption {
+          type = lib.types.bool;
+	  default = config.preset.graphics;
+          description = ''
+            is enable graphics and program related to it in this yukkop
+          '';
+        };
+        shellAliases = lib.mkOption {
+          type = with lib.types; attrsOf (nullOr (either str path));
+          default = {};
+          description = "Shell alliases, would provide to all enable shell";
+          example = {
+            tmux = "tmux a";
+            ll = "ls -la";
+          };
+        };
+      };
   };
 
 
   config = 
-    #lib.mkIf config.enable 
+    lib.mkIf cfg.enable 
   {
+    preset.user."${user}" = {
+      #program = {
+      #  nixvim.enable = true;
 
-    #module.home.user."${user}".program = {
-    #  nixvim.enable = true;
-    #  nixvim.persistence = lib.mkIf config.module.user."${user}".persistence true;
+      #  zsh.enable = true;
 
-    #  zsh.enable = true;
-    #  zsh.persistence = lib.mkIf config.module.user."${user}".persistence true;
-    #};
-    #module.program = {
-    #  steam.enable = lib.mkIf config.module.user."${user}".graphics true;
-    #  steam.persistence = lib.mkIf config.module.user."${user}".persistence true;
+      #  steam.enable = lib.mkIf cfg."${user}".graphics true;
   
-    #  qutebrowser.enable = lib.mkIf config.module.user."${user}".graphics true;
-    #  qutebrowser.persistence = lib.mkIf config.module.user."${user}".persistence true;
+      #  qutebrowser.enable = lib.mkIf cfg.graphics true;
 
-    #  mpv.enable = lib.mkIf config.module.user."${user}".graphics true;
-    #  mpv.persistence = lib.mkIf config.module.user."${user}".persistence true;
+      #  mpv.enable = lib.mkIf cfg.graphics true;
 
-    #  #discord.enable = lib.mkIf config.module.user."${user}".graphics true;
-    #  #discord.persistence = lib.mkIf config.module.user."${user}".persistence true;
+      #  discord.enable = lib.mkIf cfg.graphics true;
 
-    #  minecraft.enable = lib.mkIf config.module.user."${user}".graphics true;
-    #  minecraft.persistence = lib.mkIf config.module.user."${user}".persistence true;
+      #  minecraft.enable = lib.mkIf cfg.graphics true;
 
-    #  obs-studio.enable = lib.mkIf config.module.user."${user}".graphics true;
-    #  obs-studio.persistence = lib.mkIf config.module.user."${user}".persistence true;
+      #  obs-studio.enable = lib.mkIf cfg.graphics true;
 
-    #  telegram.enable = lib.mkIf config.module.user."${user}".graphics true;
-    #  telegram.persistence = lib.mkIf config.module.user."${user}".persistence true;
+      #  telegram.enable = lib.mkIf cfg.graphics true;
 
-    #  tmux.enable = true;
-    #  youtube-dl.enable = true;
-    #};
+      #  tmux.enable = true;
+      #  youtube-dl.enable = true;
+      #};
+      #windowManager = lib.mkIf cfg.graphics {
+      #  hyprland = lib.mkIf cfg.graphics true;
+      #};
+    };
 
-    #module.home.windowManager.hyprland.enable = lib.mkIf config.module.user."${user}".graphics true;
-  
     users.users."${user}" = {
      isNormalUser = true;
      initialPassword = "kk";
@@ -72,25 +85,25 @@ in
 
           home.stateVersion = "24.05";
   
-          #home.persistence."/persist/home/${user}" = lib.mkIf config.persistence {
-          #  directories = [
-          #    "Downloads"
-          #    "pj"
-          #    "ms"
-          #    "pc"
-          #    "dc"
-  	  #    "mc"
-          #    "vd"
-          #    ".ssh"
-  	  #    ".config/tmux" # TODO: in tmux module
-  	  #    ".tmux" # TODO: in tmux module
-          #  ];
-          #  files = [
-  	  #    # FIXME simlynks issue
-          #    "dw" # link to Downloads
-          #  ];
-          #  allowOther = true; # allows other users, such as root, to access files
-          #};
+          home.persistence."/persist/home/${user}" = lib.mkIf config.impermanence {
+            directories = [
+              "Downloads"
+              "pj"
+              "ms"
+              "pc"
+              "dc"
+  	      "mc"
+              "vd"
+              ".ssh"
+  	      ".config/tmux" # TODO: in tmux module
+  	      ".tmux" # TODO: in tmux module
+            ];
+            files = [
+  	      # FIXME simlynks issue
+              "dw" # link to Downloads
+            ];
+            allowOther = true; # allows other users, such as root, to access files
+          };
   
   	  programs = {
   	    bash = {

@@ -1,6 +1,10 @@
- userName: { pkgs, config, lib, ... }: {
+user: { pkgs, config, lib, ... }: 
+let
+  cfg = config.preset.user."${user}".program.steam;
+in
+{
   options = {
-    module.program.steam = {
+    preset.user."${user}".program.steam = {
       enable =
         lib.mkEnableOption "enable steam";
       persistence =
@@ -9,7 +13,7 @@
   };
 
   /*  */
-  config = lib.mkIf config.module.program.steam.enable {
+  config = lib.mkIf cfg.enable {
     programs.steam = {
         enable = true;
         gamescopeSession.enable = true;
@@ -39,10 +43,10 @@
       mangohud # program for simple hardware status monitor
     ];
 
-    home-manager.users."${userName}" = {
+    home-manager.users."${user}" = {
 
-      home.persistence."/persist/home/${userName}" = 
-        lib.mkIf config.module.program.steam.persistence 
+      home.persistence."/persist/home/${user}" = 
+        lib.mkIf config.preset.impermanence 
       {
         directories = [
           ".local/share/Steam"

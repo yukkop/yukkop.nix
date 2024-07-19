@@ -4,9 +4,7 @@
     nixosModules.environment.module
   ];
 
-  options = with lib; {
-    preset.enable = mkEnableOption "enable defatult preset";
-  };
+  options = with lib; { };
   
   config = {
     users.defaultUserShell = pkgs.zsh;

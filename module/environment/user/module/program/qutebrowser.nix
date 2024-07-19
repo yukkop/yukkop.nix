@@ -1,9 +1,10 @@
-# TODO userNameS
-userName: { pkgs, lib, config, ... }: {
-  /* module for home-manager */
-
+user: { pkgs, lib, config, ... }: 
+let
+  cfg = config.preset.user."${user}".program.qutebrowser;
+in
+{
   options = {
-    module.program.qutebrowser = {
+    preset.user."${user}".program.qutebrowser = {
       enable =
         lib.mkEnableOption "enable qutebrowser";
       persistence =
@@ -13,8 +14,8 @@ userName: { pkgs, lib, config, ... }: {
     };
   };
 
-  config = lib.mkIf config.module.program.qutebrowser.enable {
-    home-manager.users."${userName}" = {
+  config = lib.mkIf cfg.enable {
+    home-manager.users."${user}" = {
       programs.qutebrowser = {
         enable = true;
 	settings = {
@@ -24,8 +25,8 @@ userName: { pkgs, lib, config, ... }: {
 	};
       };
 
-      home.persistence."/persist/home/${userName}" = 
-        lib.mkIf config.module.program.qutebrowser.persistence 
+      home.persistence."/persist/home/${user}" = 
+        lib.mkIf config.preset.impermanence 
       {
         directories = [
           #".config/qutebrowser"

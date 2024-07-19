@@ -7,9 +7,11 @@
 
   options = {
     preset = {
+      enable = lib.mkEnableOption "enable defatult preset";
+      graphics = lib.mkEnableOption "enable graphics"; 
       impermanence = lib.mkEnableOption "enable impermanence on system";
       shellAliases = lib.mkOption {
-        type = lib.types.attrs;
+        type = with lib.types; attrsOf (nullOr (either str path));
         default = {};
         description = "Shell alliases, would provide to all enable shell";
         example = {

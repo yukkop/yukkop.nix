@@ -1,6 +1,10 @@
-userName: { pkgs, lib, config, ... }: {
+user: { pkgs, lib, config, ... }: 
+let
+  cfg = config.preset.user."${user}".program.obs-studio;
+in
+{
   options = {
-    module.program.obs-studio = {
+    preset.user."${user}".prorgam.obs-studio = {
       enable =
         lib.mkEnableOption "enable obs-studio";
       persistence =
@@ -8,14 +12,14 @@ userName: { pkgs, lib, config, ... }: {
     };
   };
 
-  config = lib.mkIf config.module.program.obs-studio.enable {
-    home-manager.users."${userName}" = {
+  config = lib.mkIf cfg.enable {
+    home-manager.users."${user}" = {
       home.packages = with pkgs; [
         obs-studio
       ];
   
-      home.persistence."/persist/home/${userName}" = 
-        lib.mkIf config.module.program.obs-studio.persistence 
+      home.persistence."/persist/home/${user}" = 
+        lib.mkIf config.preset.impermanence 
       {
         directories = [
           ".config/obs-studio"

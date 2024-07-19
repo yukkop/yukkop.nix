@@ -67,7 +67,9 @@
 	environment = {
 	  module = import ./module/environment/module.nix;
 	  common = self.lib.readModulesRecursive ./module/environment/common;
-	  preset = self.lib.readModulesRecursive ./module/environment/preset;
+	  preset = self.lib.readModulesRecursive ./module/environment/preset // {
+	    user.module = import ./module/environment/user/module/module.nix; 
+	  };
 	};
       };
 
