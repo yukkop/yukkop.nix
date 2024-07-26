@@ -53,7 +53,7 @@ in
   
         qutebrowser.enable = lib.mkIf cfg.graphics true;
 
-        #mpv.enable = lib.mkIf cfg.graphics true;
+        mpv.enable = lib.mkIf cfg.graphics true;
 
         discord.enable = lib.mkIf cfg.graphics true;
 
@@ -61,7 +61,7 @@ in
 
         obs-studio.enable = lib.mkIf cfg.graphics true;
 
-        #telegram.enable = lib.mkIf cfg.graphics true;
+        telegram.enable = lib.mkIf cfg.graphics true;
 
         youtube-dl.enable = true;
       };

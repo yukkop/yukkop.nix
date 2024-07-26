@@ -7,6 +7,12 @@
     environment.preset.default
   ];
 
+  preset.shellAliases = {
+    nrs = "sudo nixos-rebuild switch /persist/nixos#home";
+    nrb = "sudo nixos-rebuild build /persist/nixos#home";
+    nrB = "nixos-rebuild boot /persist/nixos#home";
+  };
+
   users.defaultUserShell = pkgs.zsh;
 
   # Use the systemd-boot EFI boot loader.

@@ -53,6 +53,8 @@ in
           #".steam"
 	  # Rimworld saves
 	  ".config/unity3d/Ludeon Studios/RimWorld by Ludeon Studios/"
+	  # FTL saves
+	  ".local/share/FasterThanLight"
         ];
         allowOther = true;
       };

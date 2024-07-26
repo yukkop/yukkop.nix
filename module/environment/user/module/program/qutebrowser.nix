@@ -20,6 +20,7 @@ in
 	  webengine = {
             qt.qpa.platform = lib.mkIf cfg.wayland "wayland";
 	  };
+	  editor.command = ["kitty" "-e" "nvim" "+{line}" "{file}" "+\\\"normal {column0}|\\\""];
 	};
       };
 
