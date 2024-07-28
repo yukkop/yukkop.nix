@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-24-05.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
 
     hyprland.url = "github:hyprwm/Hyprland";
     nixos-hardware.url = "github:yukkop/nixos-hardware/b4497d9a077c777d9a7941517b7ef5045c3e873b";
@@ -35,7 +36,7 @@
     };
   };
 
-  outputs = {self, nixpkgs-24-05, nixpkgs-unstable, deploy-rs, ...} @ inputs: 
+  outputs = {self, nixos-wsl, nixpkgs-24-05, nixpkgs-unstable, deploy-rs, ...} @ inputs: 
   let
     flakeRootPath = ./.;
   
@@ -113,6 +114,23 @@
         (mkNixosConfiguration nixpkgs-24-05 "ariadne" {
           config = { };
           system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs flakeRootPath;
+            outputs = self;
+            nixosModules = self.nixosModules;
+          };
+        })
+        (mkNixosConfiguration nixpkgs-24-05 "wsl" {
+          config = { 
+	    allowUnfree = true;
+	  };
+          system = "x86_64-linux";
+	  modules = [
+	    nixos-wsl.nixosModules.default {
+              system.stateVersion = "24.05";
+	      wsl.enable = true;
+	    }
+	  ];
           specialArgs = {
             inherit inputs flakeRootPath;
             outputs = self;
