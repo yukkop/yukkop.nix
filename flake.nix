@@ -74,15 +74,6 @@
 	};
       };
 
-      #nixosConfigurations.home = nixpkgs-24-05.lib.nixosSystem {
-      #  system = "x86_64-linux";
-      #  specialArgs = {inherit inputs flakeRootPath; flakeRoot = self;};
-      #  modules = [
-      #    #self.nixosModules.system.home
-      #    ./module/system/home.nix
-      #  ];
-      #};
-
       # CRITICAL: if you try install unfree package wthout
       # config = { allowUnfree = true; };
       # this string, it will return strange unreadble error
@@ -100,6 +91,7 @@
             inherit inputs flakeRootPath;
             outputs = self;
             nixosModules = self.nixosModules;
+	    configType = "nixos";
           };
         })
         (mkNixosConfiguration nixpkgs-24-05 "tenix" {
@@ -109,6 +101,7 @@
             inherit inputs;
             outputs = self;
             nixosModules = self.nixosModules;
+	    configType = "nixos";
           };
         })
         (mkNixosConfiguration nixpkgs-24-05 "ariadne" {
@@ -118,6 +111,7 @@
             inherit inputs flakeRootPath;
             outputs = self;
             nixosModules = self.nixosModules;
+	    configType = "nixos";
           };
         })
         (mkNixosConfiguration nixpkgs-24-05 "wsl" {
@@ -135,6 +129,7 @@
             inherit inputs flakeRootPath;
             outputs = self;
             nixosModules = self.nixosModules;
+	    configType = "nixos";
           };
         })
         (mkNixosConfiguration nixpkgs-24-05 "neverlate" {
@@ -143,6 +138,7 @@
           specialArgs = {
             inherit inputs flakeRootPath;
             outputs = self;
+	    configType = "nixos";
           };
         })
       ];

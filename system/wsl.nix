@@ -5,6 +5,8 @@
     environment.preset.default
   ];
 
+  wsl.defaultUser = "yukkop";
+
   preset.impermanence = false;
   preset.user.yukkop.enable = true;
 
