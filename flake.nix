@@ -6,14 +6,18 @@
     nixpkgs-24-05.url = "github:nixos/nixpkgs/nixos-24.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
 
+    nix-on-droid = {
+      url = "github:nix-community/nix-on-droid/release-24.05";
+      inputs.nixpkgs.follows = "nixpkgs-24-05";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     hyprland.url = "github:hyprwm/Hyprland";
     nixos-hardware.url = "github:yukkop/nixos-hardware/b4497d9a077c777d9a7941517b7ef5045c3e873b";
 
     nixvim = {
       url = "github:nix-community/nixvim/nixos-24.05";
       inputs.nixpkgs.follows = "nixpkgs-24-05";
-      #url = "github:nix-community/nixvim";
-      #inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     deploy-rs = {
@@ -36,7 +40,7 @@
     };
   };
 
-  outputs = {self, nixos-wsl, nixpkgs-24-05, nixpkgs-unstable, deploy-rs, ...} @ inputs: 
+  outputs = {self, nixos-wsl, nix-on-droid, nixpkgs-24-05, nixpkgs-unstable, deploy-rs, ...} @ inputs: 
   let
     flakeRootPath = ./.;
   
@@ -72,6 +76,18 @@
 	    user.module = import ./module/environment/user/module/module.nix; 
 	  };
 	};
+      };
+
+      nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
+        pkgs = import nixpkgs-24-05 {
+	  allowUnfree = true;
+	};
+        modules = [ ./system/tablet.nix ];
+        extraSpecialArgs = {
+          inherit inputs flakeRootPath;
+          outputs = self;
+          nixosModules = self.nixosModules;
+        };
       };
 
       # CRITICAL: if you try install unfree package wthout

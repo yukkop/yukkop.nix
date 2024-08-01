@@ -23,5 +23,10 @@
         };
       };
     };
+    environment.persistence = {
+      type = lib.types.anything; 
+      default = {};
+      description = "";
+    };
   };
 }
