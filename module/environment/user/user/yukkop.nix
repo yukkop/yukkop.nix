@@ -63,7 +63,10 @@ in
 
         telegram.enable = lib.mkIf cfg.graphics true;
 
-        youtube-dl.enable = true;
+        # deprecated
+        youtube-dl.enable = false;
+
+        yt-dlp.enable = true;
       };
       windowManager = lib.mkIf cfg.graphics {
         hyprland.enable = lib.mkIf cfg.graphics true;

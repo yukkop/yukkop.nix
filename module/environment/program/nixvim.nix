@@ -1,4 +1,4 @@
-{ lib, config, inputs, nixosModules, outputs, ...}@args:
+{ lib, config, inputs, nixosModules, outputs, pkgs, ...}@args:
 let 
   cfg = config.preset.program.nixvim;
 in

@@ -1,4 +1,13 @@
-user: { lib, config, inputs, nixosModules, outputs, ...}@args:
+user: { 
+  lib,
+  config,
+  inputs,
+  nixosModules,
+  outputs,
+  pkgs,
+  ...
+}@args:
+
 let
   cfg = config.preset.user."${user}".program.nixvim;
 in

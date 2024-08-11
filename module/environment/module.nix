@@ -11,8 +11,17 @@
     preset = {
       enable = lib.mkEnableOption "enable defatult preset";
       graphics = lib.mkEnableOption "enable graphics"; 
-      nix-on-droid = lib.mkEnableOption "enable nix-on-droid";
-      impermanence = lib.mkEnableOption "enable impermanence on system";
+      impermanence = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "enable impermanence on system";
+        apply = x: 
+          if (configType == "nix-on-droid" || configType == "nixos-wsl") && x then
+            abort "not able to use preset.impermanence on nix-on-droid or in windows subsystem linux (WSL)"
+          else
+            x;
+        example = true;
+      };
       shellAliases = lib.mkOption {
         type = with lib.types; attrsOf (nullOr (either str path));
         default = {};
@@ -22,11 +31,6 @@
           ll = "ls -la";
         };
       };
-    };
-    environment.persistence = {
-      type = lib.types.anything; 
-      default = {};
-      description = "";
     };
   };
 }

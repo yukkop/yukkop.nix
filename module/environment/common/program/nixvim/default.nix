@@ -1,4 +1,5 @@
-{ ... }:
+{ pkgs, ... }:
+
 {
   enable = true;
   colorschemes.kanagawa = {
@@ -39,18 +40,22 @@
     {
       mode = "n";
       key = "<leader>dn";
-      #options.silent = true;
       action = "<cmd>lua vim.diagnostic.goto_next()<CR>";
     }
     {
       mode = "n";
       key = "<leader>dp";
-      #options.silent = true;
       action = "<cmd>lua vim.diagnostic.goto_prev()<CR>";
     }
   ];
+  extraPlugins = with pkgs.vimPlugins; [ nvim-treesitter-parsers.templ vim-shellcheck ];
   plugins = {
+    # loading spin for lsp server
+    fidget.enable = true;
+    # vim way directory redactor
     oil.enable = true;
+    # allow use zsh history in nvim
+    #cmp-zsh = true;
     treesitter = {
       enable = true;
       #settings = {
@@ -140,6 +145,11 @@
         clangd.enable = true;
         /* TS, JS */
         tsserver.enable = true;
+	/* GO */
+	gopls.enable = true;
+	templ.enable = true;
+	/* SHELL */
+	bashls.enable = true;
       };
     };
   };

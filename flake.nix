@@ -4,7 +4,10 @@
   inputs = {
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-24-05.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/main";
+      inputs.nixpkgs.follows = "nixpkgs-24-05";
+    };
 
     nix-on-droid = {
       url = "github:nix-community/nix-on-droid/release-24.05";
@@ -12,7 +15,11 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs-24-05";
+    };
+
     nixos-hardware.url = "github:yukkop/nixos-hardware/b4497d9a077c777d9a7941517b7ef5045c3e873b";
 
     nixvim = {
@@ -87,6 +94,7 @@
           inherit inputs flakeRootPath;
           outputs = self;
           nixosModules = self.nixosModules;
+	  configType = "nix-on-droid";
         };
       };
 
@@ -145,7 +153,7 @@
             inherit inputs flakeRootPath;
             outputs = self;
             nixosModules = self.nixosModules;
-	    configType = "nixos";
+	    configType = "nixos-wsl";
           };
         })
         (mkNixosConfiguration nixpkgs-24-05 "neverlate" {
