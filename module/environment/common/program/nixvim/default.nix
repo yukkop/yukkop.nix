@@ -48,7 +48,7 @@
       action = "<cmd>lua vim.diagnostic.goto_prev()<CR>";
     }
   ];
-  extraPlugins = with pkgs.vimPlugins; [ nvim-treesitter-parsers.templ vim-shellcheck ];
+  extraPlugins = with pkgs.vimPlugins; [ nvim-treesitter-parsers.templ vim-shellcheck vim-grammarous ];
   plugins = {
     # loading spin for lsp server
     fidget.enable = true;

@@ -16,6 +16,8 @@
       };
 
       environment.systemPackages = [ pkgs.shellcheck ];
+
+      virtualisation.docker.enable = true;
     }
     # utilities
     {
