@@ -48,7 +48,12 @@
       action = "<cmd>lua vim.diagnostic.goto_prev()<CR>";
     }
   ];
-  extraPlugins = with pkgs.vimPlugins; [ nvim-treesitter-parsers.templ vim-shellcheck vim-grammarous ];
+  extraPlugins = 
+    (with pkgs.vimPlugins; [
+      nvim-treesitter-parsers.templ
+      vim-shellcheck vim-grammarous
+    ]) ++
+    (with pkgs; [ postgres-lsp ]);
   plugins = {
     # loading spin for lsp server
     fidget.enable = true;
@@ -150,6 +155,12 @@
 	templ.enable = true;
 	/* SHELL */
 	bashls.enable = true;
+	/* KOTLIN */
+        kotlin-language-server.enable = true;
+	/* SCALA */
+        metals.enable = true;
+	/* SQL */
+	sqls.enable = true;
       };
     };
   };
