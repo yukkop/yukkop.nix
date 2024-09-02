@@ -15,8 +15,12 @@
   set -g @continuum-restore 'on'
   set -g @continuum-boot 'on'
   set -g @continuum-save-interval '10'
+
+  bind-key    -T copy-mode-vi v                  send-keys -X begin-selection
+  bind-key    -T copy-mode-vi C-v                send-keys -X rectangle-toggle
   '';
   keyMode = "vi";
+  escapeTime = 500; # mili sec
   historyLimit = 50000;
   newSession = true; # Automatically spawn a session if trying to attach and none are running.
 }

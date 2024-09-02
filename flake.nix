@@ -45,9 +45,13 @@
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs-24-05";
     };
+
+    # privat repo
+    # FIXME starter system in neverlate repo
+    neverlate.url = "git+ssh://github/yukkop/neverlate.git?shallow=1";
   };
 
-  outputs = {self, nixos-wsl, nix-on-droid, nixpkgs-24-05, nixpkgs-unstable, deploy-rs, ...} @ inputs: 
+  outputs = {self, nixos-wsl, nix-on-droid, nixpkgs-24-05, nixpkgs-unstable, deploy-rs, ...}@inputs: 
   let
     flakeRootPath = ./.;
   
@@ -118,19 +122,47 @@
 	    configType = "nixos";
           };
         })
-        (mkNixosConfiguration nixpkgs-24-05 "tenix" {
-          config = { };
-          system = "x86_64-linux";
-          specialArgs = {
-            inherit inputs;
-            outputs = self;
-            nixosModules = self.nixosModules;
-	    configType = "nixos";
-          };
-        })
-        (mkNixosConfiguration nixpkgs-24-05 "ariadne" {
-          config = { };
-          system = "x86_64-linux";
+        #(let
+	#  name = "neverlate";
+	#  system = "x86_64-linux";
+	#  nixpkgs = nixpkgs-24-05;
+        #  config = { 
+	#    allowUnfree = true;
+	#  };
+	#in
+	#{
+        #  inherit name;
+        #  value = nixpkgs.lib.nixosSystem {
+	#    pkgs = import nixpkgs {
+        #      inherit system config;
+        #    };
+        #    modules = [
+        #      { networking.hostName = "${name}"; }
+	#      # SAFETY: somehow this module cannot be imported to another module
+	#      # strange `infity recursion` error
+	#      inputs.neverlate.nixosModules.${system}.default
+	#      ./system/${name}.nix
+	#      #./system/test.nix
+        #    ];
+        #    specialArgs = {
+        #      inherit inputs;
+        #      outputs = self;
+        #      nixosModules = self.nixosModules;
+	#      configType = "nixos";
+	#    };
+	#  };
+	#})
+        (let
+	  system = "x86_64-linux";
+	in
+	mkNixosConfiguration nixpkgs-24-05 "neverlate" {
+	  inherit system;
+          config = { 
+	    allowUnfree = true;
+	  };
+          modules = [
+	    inputs.neverlate.nixosModules.${system}.default
+	  ];
           specialArgs = {
             inherit inputs flakeRootPath;
             outputs = self;
@@ -156,15 +188,6 @@
 	    configType = "nixos-wsl";
           };
         })
-        (mkNixosConfiguration nixpkgs-24-05 "neverlate" {
-          config = { };
-          system = "x86_64-linux";
-          specialArgs = {
-            inherit inputs flakeRootPath;
-            outputs = self;
-	    configType = "nixos";
-          };
-        })
       ];
 
       # --- Deployments
@@ -180,6 +203,21 @@
           sshUser = "root";
           path = deploy-rs.lib.${system}.activate.nixos
             self.nixosConfigurations.tenix;
+          user = "root";
+        };
+      };
+
+      deploy.nodes.neverlate = let
+        inherit (self.nixosConfigurations.neverlate.config.nixpkgs) system;
+      in {
+        hostname = "neverlate";
+        fastConnection = true;
+        profilesOrder = [ "system" ];
+        #sshOpts = [ ];
+        profiles."system" = {
+          sshUser = "root";
+          path = deploy-rs.lib.${system}.activate.nixos
+            self.nixosConfigurations.neverlate;
           user = "root";
         };
       };

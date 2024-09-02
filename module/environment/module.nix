@@ -1,11 +1,12 @@
 { outputs, inputs, lib, configType, ... }:
 {
   imports = 
-    (outputs.lib.readSubModulesAsList ./.) ++
-    (with inputs; [ 
+    (outputs.lib.readSubModulesAsList ./.)
+    ++ (with inputs; [ 
       impermanence.nixosModules.impermanence
-    ]) ++
-    (lib.optional (configType != "nix-on-droid") (inputs.home-manager.nixosModules.default));
+    ]) 
+    ++ (lib.optional (configType != "nix-on-droid") (inputs.home-manager.nixosModules.default))
+  ;
 
   options = {
     preset = {

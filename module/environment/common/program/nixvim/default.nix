@@ -51,7 +51,9 @@
   extraPlugins = 
     (with pkgs.vimPlugins; [
       nvim-treesitter-parsers.templ
-      vim-shellcheck vim-grammarous
+      vim-shellcheck
+      vim-grammarous
+      #nvim-metals # scala lsp
     ]) ++
     (with pkgs; [ postgres-lsp ]);
   plugins = {
@@ -158,9 +160,14 @@
 	/* KOTLIN */
         kotlin-language-server.enable = true;
 	/* SCALA */
-        metals.enable = true;
+        metals = {
+	  enable = true;
+	  cmd = ["metals"];
+	};
 	/* SQL */
 	sqls.enable = true;
+	/* JAVA */
+	java-language-server.enable = true;
       };
     };
   };

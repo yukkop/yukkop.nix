@@ -12,7 +12,7 @@ in
         default = nixosModules.environment.common.program.tmux.default;
         apply = x: if isFunction x then x else if isAttrs x then x else throw "${cfg}.config must be a function or a attrs";
         description = ''
-          nixvim config attributes or fuction that return its
+          tmux config attributes or fuction that return its
         '';
       };
     };

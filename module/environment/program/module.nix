@@ -32,6 +32,7 @@ in
         zsh.enable = lib.mkDefault true;
         tmux.enable = lib.mkDefault true;
         nixvim.enable = lib.mkDefault true;
+        zoxide.enable = lib.mkDefault true;
       };
 
       home-manager.users.root = {

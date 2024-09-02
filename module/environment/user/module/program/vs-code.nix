@@ -1,12 +1,12 @@
 user: { pkgs, lib, config,  ... }: 
 let
-  cfg = config.preset.user."${user}".program.discord;
+  cfg = config.preset.user."${user}".program.vs-code;
 in
 {
   options = {
-    preset.user."${user}".program.discord = {
+    preset.user."${user}".program.vs-code = {
       enable =
-        lib.mkEnableOption "enable discord";
+        lib.mkEnableOption "enable vs-code";
     };
   };
  
@@ -30,15 +30,6 @@ in
            ];
          })
       ];
- 
-      home.persistence."/persist/home/${user}" =
-        lib.mkIf config.preset.impermanence
-      {
-        directories = [
-          ".config/discord"
-        ];
-        allowOther = true;
-      };
     };
   };
 }

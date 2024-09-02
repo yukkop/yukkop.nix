@@ -61,7 +61,7 @@
         };
     })
     ( if configType != "nix-on-droid" then {
-      users.defaultUserShell = pkgs.zsh;
+      users.defaultUserShell = mkIf config.programs.zsh.enable pkgs.zsh;
       nix = {
         settings = {
           # Enable flakes and new 'nix' command

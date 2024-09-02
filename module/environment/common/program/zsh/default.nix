@@ -19,4 +19,7 @@
     #theme = "kardan"
     #theme = "nicoulaj"
   };
+  initExtra =  ''
+    set -ovi
+  '';
 }
