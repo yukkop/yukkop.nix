@@ -148,7 +148,7 @@
             formatting = { command = ["nixpkgs-fmt"]; };
           };
         };
-        /* C */
+        /* C / C++ */
         clangd.enable = true;
         /* TS, JS */
         tsserver.enable = true;
@@ -168,6 +168,8 @@
 	sqls.enable = true;
 	/* JAVA */
 	java-language-server.enable = true;
+	/* PYTHON */
+	pylsp.enable = true;
       };
     };
   };

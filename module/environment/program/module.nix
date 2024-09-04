@@ -31,8 +31,11 @@ in
       preset.program = lib.mkIf cfg.defaultConfig {
         zsh.enable = lib.mkDefault true;
         tmux.enable = lib.mkDefault true;
+        htop.enable = lib.mkDefault true;
         nixvim.enable = lib.mkDefault true;
         zoxide.enable = lib.mkDefault true;
+
+        ncdu.enable = lib.mkDefault false;
       };
 
       home-manager.users.root = {

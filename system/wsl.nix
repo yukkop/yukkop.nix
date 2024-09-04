@@ -7,8 +7,15 @@
 
   wsl.defaultUser = "yukkop";
 
+  swapDevices = [ {
+    device = "/var/lib/swapfile";
+    size = 16*1024;
+  } ];
+
   preset.impermanence = false;
   preset.user.yukkop.enable = true;
+
+  preset.program.ncdu.enable = lib.mkForce true;
 
   preset.shellAliases = {
     nrs = "sudo nixos-rebuild switch /persist/nixos#home";
