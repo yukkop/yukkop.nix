@@ -16,6 +16,7 @@
   preset.user.yukkop.enable = true;
 
   preset.program.ncdu.enable = lib.mkForce true;
+  preset.program.ripgrep.enable = lib.mkForce true;
 
   preset.shellAliases = {
     nrs = "sudo nixos-rebuild switch /persist/nixos#home";

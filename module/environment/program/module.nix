@@ -35,6 +35,7 @@ in
         nixvim.enable = lib.mkDefault true;
         zoxide.enable = lib.mkDefault true;
 
+        ripgrep.enable = lib.mkDefault false;
         ncdu.enable = lib.mkDefault false;
       };
 
