@@ -128,11 +128,11 @@
       with builtins; let
         paths = pipe (readDir path) [
 	  (mapAttrs (name: value:
-            if value == "regular" && hasSuffix ".nix" name && name != "module.nix" then
+            if value == "regular" && hasSuffix ".nix" name && name != "default.nix" then
               { pass = true; path =  "${path}/${name}"; }
             else if value == "directory" then
 	      let
-                path' = "${path}/${name}/module.nix";
+                path' = "${path}/${name}/default.nix";
 	      in
 	      if pathExists "${path'}" then
                 { pass = true; path = "${path'}"; }
@@ -152,11 +152,11 @@
       with builtins; let
         paths = pipe (readDir path) [
 	  (mapAttrs (name: value:
-            if value == "regular" && hasSuffix ".nix" name && name != "module.nix" then
+            if value == "regular" && hasSuffix ".nix" name && name != "default.nix" then
               { pass = true; path =  "${path}/${name}"; }
             else if value == "directory" then
 	      let
-                path' = "${path}/${name}/module.nix";
+                path' = "${path}/${name}/default.nix";
 	      in
 	      if pathExists "${path'}" then
                 { pass = true; path = "${path'}"; }
@@ -177,11 +177,11 @@
       with builtins; let
         paths = pipe (readDir path) [
 	  (mapAttrs (name: value:
-            if value == "regular" && hasSuffix ".nix" name && name != "module.nix" then
+            if value == "regular" && hasSuffix ".nix" name && name != "default.nix" then
               { pass = true; path =  "${path}/${name}"; }
             else if value == "directory" then
 	      let
-                path' = "${path}/${name}/module.nix";
+                path' = "${path}/${name}/default.nix";
 	      in
 	      if pathExists "${path'}" then
                 { pass = true; path = "${path'}"; }
@@ -195,7 +195,7 @@
         ];
         pathToName = flip pipe [
           (removePrefix "${path}/")
-          (replaceStrings ["/module.nix" ".nix"] ["" ""])
+          (replaceStrings ["/default.nix" ".nix"] ["" ""])
         ];
         attrList =
           map (path': {

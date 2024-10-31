@@ -1,4 +1,4 @@
-{ inputs, lib, config, nixosModules,  ... }@args:
+module: { inputs, lib, config,  ... }@args:
 let 
   user = "yukkop";
   cfg = config.preset.user."${user}";
@@ -10,7 +10,7 @@ let
 in
 {
   imports = [
-    (nixosModules.environment.preset.user.module user)
+    ((import module) user)
   ];
   
   options = {
@@ -19,7 +19,7 @@ in
           lib.mkEnableOption "enable ${user}";
         graphics = lib.mkOption {
           type = lib.types.bool;
-	  default = config.preset.graphics;
+	  default = false;
           description = ''
             is enable graphics and program related to it in this yukkop
           '';
@@ -41,6 +41,7 @@ in
     lib.mkIf cfg.enable 
   {
     preset.user."${user}" = {
+      graphics = lib.mkDefault (config.preset.graphics or false);
       shellAliases = shellAliases;
       program = {
         nixvim.enable = true;

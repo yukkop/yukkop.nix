@@ -39,9 +39,10 @@ in
     # impruve game expireance
     programs.gamemode.enable = true;
 
-    environment.systemPackages = with pkgs; [
-      mangohud # program for simple hardware status monitor
-    ];
+    # FIXME: env packages in home manager? if i use nix on droid? a?
+    #environment.systemPackages = with pkgs; [
+    #  mangohud # program for simple hardware status monitor
+    #];
 
     home-manager.users."${user}" = {
 

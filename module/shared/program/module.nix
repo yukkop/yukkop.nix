@@ -23,10 +23,15 @@ in
 
   config = lib.mkMerge [
     # not exist in nix-on-droid
-    (lib.mkIf (configType != "nix-on-droid") {
+
+    #( lib.optionalAttrs (configType != "nix-on-droid") {
+    #  # disable default not strictly necessary packages - nano, perl, etc
+    #  environment.defaultPackages = lib.mkIf (!cfg.defaultPackages) [];
+    #} )
+    ( if configType != "nix-on-droid" then {
       # disable default not strictly necessary packages - nano, perl, etc
       environment.defaultPackages = lib.mkIf (!cfg.defaultPackages) [];
-    })
+    } else {} )
     {
       preset.program = lib.mkIf cfg.defaultConfig {
         zsh.enable = lib.mkDefault true;

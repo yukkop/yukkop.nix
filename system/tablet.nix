@@ -1,9 +1,7 @@
 # configuration for nix-on-droid
 { config, lib, pkgs, outputs, ... }:
 {
-  imports = [
-    outputs.nixosModules.environment.preset.default
-  ];
+  imports = [ ];
 
   #preset.impermanence = lib.mkForce false;
   #preset.graphics = lib.mkForce false;

@@ -54,7 +54,7 @@
   outputs = {self, nixos-wsl, nix-on-droid, nixpkgs-24-05, nixpkgs-unstable, deploy-rs, ...}@inputs: 
   let
     flakeRootPath = ./.;
-  
+
     # Generates outputs for all systems below
     forAllSystems = nixpkgs-unstable.lib.genAttrs systems;
     systems = [
@@ -78,26 +78,23 @@
         config = self.lib.defaultConfig nixpkgs-unstable;
       });
 
-      nixosModules = {
-        infrastructure = self.lib.readModulesRecursive ./module/infrastructure;
-	environment = {
-	  module = import ./module/environment/module.nix;
-	  common = self.lib.readModulesRecursive ./module/environment/common;
-	  preset = self.lib.readModulesRecursive ./module/environment/preset // {
-	    user.module = import ./module/environment/user/module/module.nix; 
-	  };
-	};
-      };
+      nixosModules = ./module/nix-os/default.nix;
+      sharedModules = ./module/shared/default.nix;
+      homeManagerModules = ./module/home-manager/default.nix; 
+      nixOnDroidModules = ./module/nix-on-droid/default.nix; 
 
-      nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
+      nixOnDroidConfigurations.tablet = nix-on-droid.lib.nixOnDroidConfiguration {
         pkgs = import nixpkgs-24-05 {
 	  allowUnfree = true;
 	};
-        modules = [ ./system/tablet.nix ];
+        modules = [
+	  ./system/tablet.nix
+	  self.nixOnDroidModules
+	  self.homeManagerModules
+	];
         extraSpecialArgs = {
           inherit inputs flakeRootPath;
           outputs = self;
-          nixosModules = self.nixosModules;
 	  configType = "nix-on-droid";
         };
       };
@@ -122,36 +119,6 @@
 	    configType = "nixos";
           };
         })
-        #(let
-	#  name = "neverlate";
-	#  system = "x86_64-linux";
-	#  nixpkgs = nixpkgs-24-05;
-        #  config = { 
-	#    allowUnfree = true;
-	#  };
-	#in
-	#{
-        #  inherit name;
-        #  value = nixpkgs.lib.nixosSystem {
-	#    pkgs = import nixpkgs {
-        #      inherit system config;
-        #    };
-        #    modules = [
-        #      { networking.hostName = "${name}"; }
-	#      # SAFETY: somehow this module cannot be imported to another module
-	#      # strange `infity recursion` error
-	#      inputs.neverlate.nixosModules.${system}.default
-	#      ./system/${name}.nix
-	#      #./system/test.nix
-        #    ];
-        #    specialArgs = {
-        #      inherit inputs;
-        #      outputs = self;
-        #      nixosModules = self.nixosModules;
-	#      configType = "nixos";
-	#    };
-	#  };
-	#})
         (let
 	  system = "x86_64-linux";
 	in

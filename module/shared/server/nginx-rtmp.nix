@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+ FIXME: { pkgs, config, lib, ... }:
 let
   # Define a custom Nginx with RTMP module
   nginxWithRtmp = pkgs.nginxStable.override {
