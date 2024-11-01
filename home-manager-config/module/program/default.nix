@@ -1,6 +1,6 @@
 user: { outputs, pkgs, ... }@args:
 {
-  imports = (outputs.lib.readSubModulesAsListWithArgs ./. user);
+  imports = (outputs.lib.readSubModulesAsList ./.);
 
   options = {};
 

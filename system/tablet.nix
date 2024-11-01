@@ -1,12 +1,9 @@
 # configuration for nix-on-droid
-{ config, lib, pkgs, outputs, ... }:
+{ config, lib, pkgs, outputs, ... }@args:
 {
   imports = [ ];
-
-  #preset.impermanence = lib.mkForce false;
-  #preset.graphics = lib.mkForce false;
-  #preset.nix-on-droid = lib.mkForce true;
-  #preset.user.yukkop.enable = lib.mkForce true;
+   
+  home-manager.config = outputs.homeManagerConfigs.yukkop;
 
   # Backup etc files instead of failing to activate generation if a file already exists in /etc
   environment.etcBackupExtension = ".bak";

@@ -1,10 +1,10 @@
-user: { pkgs, lib, config, ... }: 
+{ pkgs, lib, config, ... }: 
 let
-  cfg = config.preset.user."${user}".program.qutebrowser;
+  cfg = config.preset.program.qutebrowser;
 in
 {
   options = {
-    preset.user."${user}".program.qutebrowser = {
+    preset.program.qutebrowser = {
       enable =
         lib.mkEnableOption "enable qutebrowser";
       wayland =
@@ -13,7 +13,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users."${user}" = {
       programs.qutebrowser = {
         enable = true;
 	settings = {
@@ -34,5 +33,4 @@ in
         allowOther = true; 
       };
     };
-  };
 }

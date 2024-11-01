@@ -80,8 +80,14 @@
 
       nixosModules = ./module/nix-os/default.nix;
       sharedModules = ./module/shared/default.nix;
-      homeManagerModules = ./module/home-manager/default.nix; 
       nixOnDroidModules = ./module/nix-on-droid/default.nix; 
+      core = ./module/core/default.nix; 
+      homeManagerConfigs = self.lib.readSuperficially ./home-manager-config; 
+
+      extraSpecialArgs = {
+        inherit inputs;
+        outputs = self;
+      };
 
       nixOnDroidConfigurations.tablet = nix-on-droid.lib.nixOnDroidConfiguration {
         pkgs = import nixpkgs-24-05 {
@@ -89,14 +95,9 @@
 	};
         modules = [
 	  ./system/tablet.nix
-	  self.nixOnDroidModules
-	  self.homeManagerModules
+	  self.core
 	];
-        extraSpecialArgs = {
-          inherit inputs flakeRootPath;
-          outputs = self;
-	  configType = "nix-on-droid";
-        };
+	extraSpecialArgs = self.extraSpecialArgs;
       };
 
       # CRITICAL: if you try install unfree package wthout

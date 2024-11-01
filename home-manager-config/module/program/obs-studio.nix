@@ -1,10 +1,10 @@
-user: { pkgs, lib, config, ... }: 
+{ pkgs, lib, config, ... }: 
 let
-  cfg = config.preset.user."${user}".program.obs-studio;
+  cfg = config.preset.program.obs-studio;
 in
 {
   options = {
-    preset.user."${user}".program.obs-studio = {
+    preset.program.obs-studio = {
       enable =
         lib.mkEnableOption "enable obs-studio";
       persistence =
@@ -13,7 +13,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users."${user}" = {
       home.packages = with pkgs; [
         obs-studio
       ];
@@ -26,6 +25,5 @@ in
         ];
         allowOther = true;
       };
-    };
   };
 }

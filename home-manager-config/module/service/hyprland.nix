@@ -1,18 +1,17 @@
-user: { lib, config, ... }:
+{ lib, config, ... }:
 let
-  cfg = config.preset.user."${user}".windowManager.hyprland;
+  cfg = config.preset.windowManager.hyprland;
 in
 {
   /* this module may include in home-manager module */
   options = {
-    preset.user."${user}".windowManager.hyprland = {
+    preset.windowManager.hyprland = {
       enable =
         lib.mkEnableOption "enable hyprland";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users."${user}" = {
       #programs.eww = {
       #  enable = true;
       #  configDir = "/home/${userName}/.config/eww/";
@@ -190,6 +189,5 @@ in
           ];
         };
       };
-    };
   };
 }

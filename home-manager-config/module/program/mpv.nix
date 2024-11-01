@@ -1,11 +1,11 @@
-user: { pkgs, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 let
-  userCfg = config.preset.user."${user}";
+  userCfg = config.preset;
   cfg = userCfg.program.mpv;
 in
 {
   options = {
-    preset.user."${user}".program.mpv = {
+    preset.program.mpv = {
       enable =
         lib.mkEnableOption "enable mpv";
       persistence =
@@ -14,11 +14,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    preset.user."${user}".shellAliases = {
-      mpvf = "mpv --osd-msg1='\${estimated-frame-number} / \${estimated-frame-count}'";
-    };
+    # FIXME: home manager related module in nixos modules
+    # preset.shellAliases = {
+    #   mpvf = "mpv --osd-msg1='\${estimated-frame-number} / \${estimated-frame-count}'";
+    # };
 
-    home-manager.users."${user}" = {
       home.packages = with pkgs; [
         mpv
       ];
@@ -32,6 +32,5 @@ in
         ];
         allowOther = true;
       };
-    };
   };
 }

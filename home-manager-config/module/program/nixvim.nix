@@ -9,11 +9,11 @@ user: {
 }@args:
 
 let
-  cfg = config.preset.user."${user}".program.nixvim;
+  cfg = config.preset.program.nixvim;
 in
 {
   options = {
-    preset.user."${user}".program.nixvim = {
+    preset.program.nixvim = {
       enable =
         lib.mkEnableOption "enable nixvim";
       persistence =
@@ -31,7 +31,6 @@ in
 
   # TODO: take out this to funktion and use for both homeManagerModules.nixvim and modules.nixvim
   config = lib.mkIf cfg.enable {
-    home-manager.users."${user}" = {
       imports = [
         inputs.nixvim.homeManagerModules.nixvim 
       ];
@@ -47,6 +46,5 @@ in
         ];
         allowOther = true;
       };
-    };
   };
 }

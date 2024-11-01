@@ -1,10 +1,10 @@
-user: { pkgs, lib, config,  ... }: 
+{ pkgs, lib, config,  ... }: 
 let
-  cfg = config.preset.user."${user}".program.vs-code;
+  cfg = config.preset.program.vs-code;
 in
 {
   options = {
-    preset.user."${user}".program.vs-code = {
+    preset.program.vs-code = {
       enable =
         lib.mkEnableOption "enable vs-code";
     };
@@ -13,8 +13,6 @@ in
   config = 
     lib.mkIf cfg.enable
   {
-    home-manager.users."${user}" = 
-    {
       home.packages = with pkgs; [
 	 (vscode-with-extensions.override {
            vscodeExtensions = with vscode-extensions; [
@@ -30,7 +28,6 @@ in
            ];
          })
       ];
-    };
   };
 }
 

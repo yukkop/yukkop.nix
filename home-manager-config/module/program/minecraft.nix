@@ -1,10 +1,10 @@
-user: { pkgs, lib, config, ... }: 
+{ pkgs, lib, config, ... }: 
 let
-  cfg = config.preset.user."${user}".program.minecraft;
+  cfg = config.preset.program.minecraft;
 in
 {
   options = {
-    preset.user."${user}".program.minecraft = {
+    preset.program.minecraft = {
       enable =
         lib.mkEnableOption "enable minecraft";
       persistence =
@@ -13,7 +13,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users."${user}" = {
       home.packages = with pkgs;
       [
         # TODO: some overlay with config
@@ -31,6 +30,5 @@ in
         ];
         allowOther = true;
       };
-    };
   };
 }

@@ -1,11 +1,11 @@
-user: { config, lib,  outputs, nixosModules, ... }@args: 
+{ config, lib,  outputs, nixosModules, ... }@args: 
 let
-  userCfg = config.preset.user."${user}";
+  userCfg = config;
   cfg = userCfg.program.zsh;
 in
 {
   options = {
-    preset.user."${user}".program.zsh = {
+    preset.program.zsh = {
       enable =
         lib.mkEnableOption "enable steam";
       persistence =
@@ -23,9 +23,6 @@ in
 
   /*  */
   config = lib.mkIf cfg.enable {
-    home-manager = {
-      users = {
-        "${user}" = {
 	  imports = [
 	  ];
 
@@ -40,7 +37,4 @@ in
             allowOther = true;
           };
         };
-      };
-    };
-  };
 }

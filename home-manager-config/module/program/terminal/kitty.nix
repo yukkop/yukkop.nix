@@ -1,17 +1,16 @@
-user: { pkgs, lib, config, ... }: 
+{ pkgs, lib, config, ... }: 
 let
-  cfg = config.preset.user."${user}".program.terminal.kitty;
+  cfg = config.preset.program.terminal.kitty;
 in
 {
   options = {
-    preset.user."${user}".program.terminal.kitty = {
+    preset.program.terminal.kitty = {
       enable =
         lib.mkEnableOption "enable kitty";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users."${user}" = {
       home.packages = with pkgs; [ kitty ];
       home.persistence."/persist/home/${user}" = 
         lib.mkIf config.preset.impermanence 
@@ -20,6 +19,5 @@ in
         files = [ ];
         allowOther = true; 
       };
-    };
   };
 }

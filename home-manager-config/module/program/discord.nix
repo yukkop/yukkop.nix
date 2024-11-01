@@ -1,10 +1,10 @@
-user: { pkgs, lib, config,  ... }: 
+{ pkgs, lib, config,  ... }: 
 let
-  cfg = config.preset.user."${user}".program.discord;
+  cfg = config.preset.program.discord;
 in
 {
   options = {
-    preset.user."${user}".program.discord = {
+    preset.program.discord = {
       enable =
         lib.mkEnableOption "enable discord";
     };
@@ -13,8 +13,6 @@ in
   config = 
     lib.mkIf cfg.enable
   {
-    home-manager.users."${user}" = 
-    {
       home.packages = with pkgs; [
         discord
       ];
@@ -27,6 +25,5 @@ in
         ];
         allowOther = true;
       };
-    };
   };
 }

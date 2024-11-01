@@ -171,6 +171,32 @@
       in
         paths;
 
+    readSuperficially = path: 
+      with lib; 
+      with builtins; let
+        paths = pipe (readDir path) [
+	  (mapAttrs (name: value:
+            if value == "regular" && hasSuffix ".nix" name && name != "default.nix" then
+              { pass = true; path =  "${path}/${name}"; }
+	    else
+	      { pass = false; }
+          ))
+	  ( filterAttrs (_: value: value.pass == true))
+	  (mapAttrsToList (_: value: value.path))
+        ];
+        pathToName = flip pipe [
+          (removePrefix "${path}/")
+          (replaceStrings ["/default.nix" ".nix"] ["" ""])
+        ];
+        attrList =
+          map (path': {
+            name = pathToName (unsafeDiscardStringContext path');
+            value = import path';
+          })
+          paths;
+      in
+        listToAttrs attrList;
+
     /* */
     readSubModules = path: 
       with lib; 
