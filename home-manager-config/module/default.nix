@@ -1,6 +1,6 @@
-{ outputs, ... }: 
+{ ... }: 
 {
-  #imports = outputs.lib.readSubModulesAsList ./.;
+  imports = [];
 
   options = { };
 

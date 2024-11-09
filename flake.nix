@@ -55,6 +55,8 @@
   let
     flakeRootPath = ./.;
 
+    myDebugValue = builtins.trace "Debugging value" (42);
+
     # Generates outputs for all systems below
     forAllSystems = nixpkgs-unstable.lib.genAttrs systems;
     systems = [
@@ -78,10 +80,10 @@
         config = self.lib.defaultConfig nixpkgs-unstable;
       });
 
-      nixosModules = ./module/nix-os/default.nix;
-      sharedModules = ./module/shared/default.nix;
-      nixOnDroidModules = ./module/nix-on-droid/default.nix; 
-      core = ./module/core/default.nix; 
+      nixosModules = import ./module/nix-os/default.nix;
+      sharedModules = import ./module/shared/default.nix;
+      nixOnDroidModules = import ./module/nix-on-droid/default.nix; 
+      core = import ./module/core/default.nix; 
       homeManagerConfigs = self.lib.readSuperficially ./home-manager-config; 
 
       extraSpecialArgs = {
@@ -95,7 +97,6 @@
 	};
         modules = [
 	  ./system/tablet.nix
-	  self.core
 	];
 	extraSpecialArgs = self.extraSpecialArgs;
       };

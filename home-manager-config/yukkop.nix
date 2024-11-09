@@ -2,15 +2,21 @@
 let
   username = "yukkop";
   cfg = config.preset;
+  myDebugValue = builtins.trace "Debugging value" (outputs);
 in
 {
           imports = [
-              inputs.impermanence.nixosModules.home-manager.impermanence
-	      #./module
-          ];
+              #inputs.impermanence.nixosModules.home-manager.impermanence
+	      ./module
+ 	  ];
 
 	  options = {
-	    prese = {
+	    preset = {
+              program = lib.mkOption {
+                type = with lib.types; attrsOf (nullOr (either str path));
+                default = {};
+                description = "";
+              };
               graphics = lib.mkEnableOption "enable graphics"; 
               shellAliases = lib.mkOption {
                 type = with lib.types; attrsOf (nullOr (either str path));
@@ -26,36 +32,35 @@ in
 
           config = {
             preset = {
-              #graphics = lib.mkDefault (config.preset.graphics or false);
-              graphics = false;
-              shellAliases = {};
-              #program = {
-              #  nixvim.enable = true;
+              graphics = lib.mkDefault false;
+              shellAliases = lib.mkDefault {};
+              program = {
+                nixvim.enable = true;
 
-              #  zsh.enable = true;
+                zsh.enable = true;
 
-              #  terminal.kitty.enable = true;
+                terminal.kitty.enable = true;
 
-              #  # REFACTOR: if (true) {true} ?????
-              #  steam.enable = lib.mkIf cfg.graphics true;
+                # REFACTOR: if (true) {true} ?????
+                steam.enable = lib.mkIf cfg.graphics true;
   
-              #  qutebrowser.enable = lib.mkIf cfg.graphics true;
+                qutebrowser.enable = lib.mkIf cfg.graphics true;
 
-              #  mpv.enable = lib.mkIf cfg.graphics true;
+                mpv.enable = lib.mkIf cfg.graphics true;
 
-              #  discord.enable = lib.mkIf cfg.graphics true;
+                discord.enable = lib.mkIf cfg.graphics true;
 
-              #  minecraft.enable = lib.mkIf cfg.graphics true;
+                minecraft.enable = lib.mkIf cfg.graphics true;
 
-              #  obs-studio.enable = lib.mkIf cfg.graphics true;
+                obs-studio.enable = lib.mkIf cfg.graphics true;
 
-              #  telegram.enable = lib.mkIf cfg.graphics true;
+                telegram.enable = lib.mkIf cfg.graphics true;
 
-              #  # deprecated
-              #  youtube-dl.enable = false;
+                # deprecated
+                youtube-dl.enable = false;
 
-              #  yt-dlp.enable = true;
-              #};
+                yt-dlp.enable = true;
+              };
               #windowManager = lib.mkIf cfg.graphics {
               #  hyprland.enable = lib.mkIf cfg.graphics true;
               #};
@@ -63,29 +68,29 @@ in
 
             home.stateVersion = "24.05";
   
-            home.persistence."/persist/home/${username}" = lib.mkIf config.preset.impermanence {
-              directories = [
-                "Downloads"
-                "pj"
-                "ms"
-                "pc"
-                "dc"
-  	        "mc"
-                "vd"
-                ".ssh"
-  	        ".config/tmux" # TODO: in tmux module
-  	        ".tmux" # TODO: in tmux module
-              ];
-              files = [
-  	        # FIXME simlynks issue
-                "dw" # link to Downloads
-              ];
-              allowOther = true; # allows other users, such as root, to access files
-            };
+            #home.persistence."/persist/home/${username}" = lib.mkIf cfg.impermanence {
+            #  directories = [
+            #    "Downloads"
+            #    "pj"
+            #    "ms"
+            #    "pc"
+            #    "dc"
+  	    #    "mc"
+            #    "vd"
+            #    ".ssh"
+  	    #    ".config/tmux" # TODO: in tmux module
+  	    #    ".tmux" # TODO: in tmux module
+            #  ];
+            #  files = [
+  	    #    # FIXME simlynks issue
+            #    "dw" # link to Downloads
+            #  ];
+            #  allowOther = true; # allows other users, such as root, to access files
+            #};
   
   	    programs = {
   	      bash = {
-  	        shellAliases = {};
+  	        shellAliases = cfg.shellAliases;
   	      };
   	    };
   
