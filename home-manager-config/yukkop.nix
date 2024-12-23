@@ -1,11 +1,10 @@
-{ inputs, lib, config,  outputs, ... }:
+{ lib, config,  ... }:
 let
   username = "yukkop";
   cfg = config.preset;
-  myDebugValue = builtins.trace "Debugging value" (outputs);
 in
 {
-          imports = [
+          imports = builtins.traceVerbose "" [
               #inputs.impermanence.nixosModules.home-manager.impermanence
 	      ./module
  	  ];

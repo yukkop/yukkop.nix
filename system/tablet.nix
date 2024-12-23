@@ -1,11 +1,23 @@
 # configuration for nix-on-droid
-{ config, lib, pkgs, outputs, inputs, ... }@args:
+{ config, lib, pkgs, ... }@args:
+let 
+  trace = builtins.traceVerbose;
+  replaceFunctions = obj: 
+    if builtins.isFunction obj then
+      "function"
+    else if builtins.isAttrs obj then
+      builtins.mapAttrs (key: value: replaceFunctions value) obj
+    else if builtins.isList obj then
+      builtins.map replaceFunctions obj
+    else
+      obj;
+in
 {
-  imports = [ outputs.core ];
+  imports = [ ];
   
-  environment.packages = with pkgs; [ vim ];
+  environment.packages = trace (replaceFunctions args) (with pkgs; [ vim ]);
    
-  home-manager.config = outputs.homeManagerConfigs.yukkop;
+  #home-manager.config = trace (replaceFunctions args) {};
   #home-manager.config = { config, ... }: {
   #  imports = [
   #      #inputs.impermanence.nixosModules.home-manager.impermanence
